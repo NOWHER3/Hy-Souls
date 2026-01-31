@@ -1,0 +1,21 @@
+{
+  "Group": "Nowhere",
+  "Name": "Hy-Souls",
+  "Version": "0.0.1",
+  "Description": "Adds a Soul Counter",
+  "Main": "me.nowhere.HySouls.SoulHud.SoulDisplayPlugin",
+  "Authors": [
+    {
+      "Name": "Nowhere",
+      "Email": "",
+      "Url": ""
+    }
+  ],
+  "Website": "",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "LoadBefore": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "SubPlugins": []
+}

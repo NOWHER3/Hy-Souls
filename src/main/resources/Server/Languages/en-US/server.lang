@@ -1,0 +1,43 @@
+items.Bench_Hysouls_Bonfire.name = Bonfire
+
+items.Ingredient_Soul_Essence.name = Soul Essence
+
+items.Food_Hysouls_Estus.name = Estus
+items.Food_Hysouls_Estus_2.name = Estus II
+items.Food_Hysouls_Estus_3.name = Estus III
+
+items.Armor_Hysouls_Adamantite_Chest.name = Adamantite Chest
+items.Armor_Hysouls_Adamantite_Hands.name = Adamantite Hands
+items.Armor_Hysouls_Adamantite_Head.name = Adamantite Head
+items.Armor_Hysouls_Adamantite_Legs.name = Adamantite Legs
+
+items.Armor_Hysouls_Cobalt_Chest.name = Cobalt Chest
+items.Armor_Hysouls_Cobalt_Hands.name = Cobalt Hands
+items.Armor_Hysouls_Cobalt_Head.name = Cobalt Head
+items.Armor_Hysouls_Cobalt_Legs.name = Cobalt Legs
+
+items.Armor_Hysouls_Thorium_Chest.name = Thorium Chest
+items.Armor_Hysouls_Thorium_Hands.name = Thorium Hands
+items.Armor_Hysouls_Thorium_Head.name = Thorium Head
+items.Armor_Hysouls_Thorium_Legs.name = Thorium Legs
+
+items.Ingredient_Hysouls_Bar_Thorium.name = Thorium Bar
+items.Ingredient_Hysouls_Bar_Adamantite.name = Adamantite Bar
+items.Ingredient_Hysouls_Bar_Cobalt.name = Cobalt Bar
+
+items.Tool_Hysouls_Pickaxe_Adamantite.name = Adamantite Pickaxe
+items.Tool_Hysouls_Pickaxe_Cobalt.name = Cobalt Pickaxe
+items.Tool_Hysouls_Pickaxe_Thorium.name = Thorium Pickaxe
+
+items.Weapon_Hysouls_Daggers_Adamantite.name = Adamantite Daggers
+items.Weapon_Hysouls_Daggers_Cobalt.name = Cobalt Daggers
+items.Weapon_Hysouls_Daggers_Thorium.name = Thorium Daggers
+
+items.Food_Hysouls_Estus.description = Instant Heal I + Health Regen I
+items.Food_Hysouls_Estus_2.description = Instant Heal II + Health Regen II
+items.Food_Hysouls_Estus_3.description = Instant Heal III + Health Regen III
+
+items.Armor_Hysouls_Solaire_Iron_Head.name = Sol Head
+items.Armor_Hysouls_Solaire_Iron_Legs.name = Sol Legs
+items.Armor_Hysouls_Solaire_Iron_Hands.name = Sol Hands
+items.Armor_Hysouls_Solaire_Cloth_Linen_Chest.name = Sol Chest

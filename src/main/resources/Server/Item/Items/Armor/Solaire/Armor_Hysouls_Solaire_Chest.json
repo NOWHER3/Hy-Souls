@@ -1,0 +1,92 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Hysouls_Solaire_Cloth_Linen_Chest.name"
+  },
+  "Parent": "Armor_Iron_Chest",
+  "Quality": "Uncommon",
+  "ItemLevel": 15,
+  "Icon": "Icons/ItemsGenerated/Hysouls/Armor_Hysouls_Solaire_Chest.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.395,
+    "Translation": [
+      0,
+      -3.3
+    ]
+  },
+  "Model": "Items/Armors/Hysouls/Solaire/Chest.blockymodel",
+  "Texture": "Items/Armors/Hysouls/Solaire/Chest_Texture.png",
+  "Recipe": {
+    "TimeSeconds": 2,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bolt_Linen",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Soul_Essence",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 20
+      },
+      {
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 6
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Bonfire",
+        "Type": "Crafting",
+        "Categories": [
+          "Bonfire_Armor_Shop"
+        ]
+      }
+    ]
+  },
+  "Armor": {
+    "ArmorSlot": "Chest",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Overtop"
+    ],
+    "StatModifiers": {
+      "Health": [
+        {
+          "Amount": 17,
+          "CalculationType": "Additive"
+        }
+      ]
+    },
+    "DamageResistance": {
+      "Physical": [
+        {
+          "Amount": 0.09,
+          "CalculationType": "Multiplicative"
+        }
+      ],
+      "Projectile": [
+        {
+          "Amount": 0.09,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Cloth_Linen"
+    ]
+  },
+  "MaxDurability": 120,
+  "ItemSoundSetId": "ISS_Armor_Cloth"
+}

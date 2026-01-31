@@ -1,0 +1,79 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Hysouls_Thorium_Head.name"
+  },
+  "Parent": "Armor_Iron_Head",
+  "Quality": "Rare",
+  "ItemLevel": 30,
+  "Icon": "Icons/ItemsGenerated/Armor_Thorium_Head.png",
+  "Model": "Items/Armors/Thorium/Head.blockymodel",
+  "Texture": "Items/Armors/Thorium/Head_Texture.png",
+  "Recipe": {
+    "TimeSeconds": 4.5,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Soul_Essence",
+        "Quantity": 110
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Bonfire",
+        "Type": "Crafting",
+        "Categories": [
+          "Bonfire_Soul_Essence_Shop"
+        ],
+        "RequiredTierLevel": 2
+      }
+    ]
+  },
+  "Armor": {
+    "ArmorSlot": "Head",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "EarAccessory",
+      "Ear",
+      "Haircut",
+      "HeadAccessory"
+    ],
+    "DamageResistance": {
+      "Physical": [
+        {
+          "Amount": 0.064,
+          "CalculationType": "Multiplicative"
+        }
+      ],
+      "Projectile": [
+        {
+          "Amount": 0.064,
+          "CalculationType": "Multiplicative"
+        }
+      ],
+      "Poison": [
+        {
+          "Amount": 0.15,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    },
+    "StatModifiers": {
+      "Health": [
+        {
+          "Amount": 12,
+          "CalculationType": "Additive"
+        }
+      ]
+    }
+  },
+  "MaxDurability": 120,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Thorium"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "DurabilityLossOnHit": 0.5
+}

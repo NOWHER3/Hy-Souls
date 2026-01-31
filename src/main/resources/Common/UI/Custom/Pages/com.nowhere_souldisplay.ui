@@ -1,0 +1,16 @@
+Group #SoulHUD {
+    Background: PatchStyle(TexturePath: "SoulCounterUI.png");
+    Anchor: (Bottom: 38, Left: 1320, Width: 150, Height: 32);
+
+      Group #SoulIcon {
+      Background: PatchStyle(TexturePath: "soul_icon.png");
+      Anchor: (Top: -8, Left: 6, Width: 46, Height: 46);
+    }
+
+      Label #SoulCount {
+      Style: (FontSize: 21, HorizontalAlignment: Center);
+      Anchor: (Top: -0, Left: 20, Right: 0, Height: 22);
+      Text: "0";
+      Padding: (Full: 2);
+    }
+  }

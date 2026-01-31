@@ -1,0 +1,230 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Bench_Hysouls_Bonfire.name",
+    "Description": ""
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Wood_Trunk"
+      },
+      {
+        "Quantity": 1,
+        "ItemId": "Weapon_Sword_Iron"
+      },
+	  {
+        "ItemId": "Ingredient_Soul_Essence",
+        "Quantity": 20
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Workbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Workbench_Crafting"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Hysouls/Hysouls_Bonfire.png",
+  "Categories": [
+    "Furniture.Benches"
+  ],
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Bench_Campfire",
+    "VariantRotation": "NESW",
+    "Bench": {
+      "Type": "Crafting",
+      "Categories": [
+
+        {
+          "Id": "Bonfire_Estus",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Estus.png",
+          "Name": "estus"
+        },
+        {
+          "Id": "Bonfire_Armor_Shop",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Items-Armor.png",
+          "Name": "armor shop"
+        },
+        {
+          "Id": "Bonfire_Weapon_Shop",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Items-Weapons.png",
+          "Name": "weapons shop"
+        },
+        {
+          "Id": "Bonfire_Soul_Essence_Shop",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Soul_Essence.png",
+          "Name": "soul essence exchange"
+        }
+      ],
+      "LocalOpenSoundEventId": "SFX_Workbench_Open",
+      "LocalCloseSoundEventId": "SFX_Workbench_Close",
+      "CompletedSoundEventId": "SFX_Workbench_Craft",
+      "FailedSoundEventId": "SFX_Generic_Crafting_Failed",
+      "BenchUpgradeSoundEventId": "SFX_Workbench_Upgrade_Start_Default",
+      "BenchUpgradeCompletedSoundEventId": "SFX_Workbench_Upgrade_Complete_Default",
+      "Id": "Bonfire",
+      "TierLevels": [
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Ingredient_Soul_Essence",
+                "Quantity": 50
+              }
+            ],
+            "TimeSeconds": 5.0
+          }
+        },
+        {
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Ingredient_Soul_Essence",
+                "Quantity": 100
+              }
+            ],
+            "TimeSeconds": 10.0
+          },
+          "CraftingTimeReductionModifier": 0.15
+        },
+        {
+          "CraftingTimeReductionModifier": 0.3
+        }
+      ]
+    },
+    "State": {
+      "Id": "crafting",
+      "Definitions": {
+        "CraftCompleted": {
+          "CustomModelAnimation": "Blocks/Benches/Workbench_Crafting.blockyanim",
+          "Looping": true
+        },
+        "CraftCompletedInstant": {
+          "CustomModelAnimation": "Blocks/Benches/Workbench_Crafting.blockyanim"
+        },
+        "Tier2": {
+          "CustomModel": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "HitboxType": "Bench_Campfire",
+          "State": {
+            "Id": "crafting",
+            "Definitions": {
+              "CraftCompleted": {
+                "CustomModelAnimation": "Blocks/Benches/Workbench2_Crafting.blockyanim"
+              }
+            }
+          }
+        },
+        "Tier3": {
+          "CustomModel": "Blocks/Benches/Hysouls/Hysouls_Bonfire.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire_Texture.png",
+              "Weight": 1
+            }
+          ],
+          "HitboxType": "Bench_Campfire",
+          "State": {
+            "Id": "crafting",
+            "Definitions": {
+              "CraftCompleted": {
+                "CustomModelAnimation": "Blocks/Benches/Workbench3_Crafting.blockyanim"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "CustomModelAnimation": "Blocks/Animations/Fire/Fire_Burn.blockyanim",
+    "BlockParticleSetId": "Dust",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "BlockSoundSetId": "Campfire",
+    "Light": {
+      "Color": "#dba"
+    },
+    "Particles": [
+      {
+        "SystemId": "Campfire_New_Cartoon",
+        "Scale": 0.9,
+        "TargetNodeName": "",
+        "PositionOffset": {
+          "Y": 0.25
+        }
+      }
+    ],
+    "AmbientSoundEventId": "SFX_Campfire_Default_Loop",
+    "Looping": true,
+    "Interactions": {
+      "Collision": {
+        "Cooldown": {
+          "Id": "BurnEffect",
+          "Cooldown": 1
+        },
+        "Interactions": [
+          {
+            "Type": "Condition",
+            "Next": {
+              "Type": "Simple",
+              "RunTime": 0.1,
+              "Next": {
+                "Type": "ApplyEffect",
+                "EffectId": "Burn"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.42,
+    "Rotation": [
+      22.5,
+      45.0,
+      22.5
+    ],
+    "Translation": [
+      12.9,
+      -11.7
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Bench"
+    ]
+  },
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

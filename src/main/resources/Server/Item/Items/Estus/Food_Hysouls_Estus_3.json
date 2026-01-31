@@ -1,0 +1,71 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Food_Hysouls_Estus_3.name",
+    "Description": "server.items.Food_Hysouls_Estus_3.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Hysouls/Hysouls_Estus_3.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Foliage/Plants/Fruit/Hysouls/Hysouls_Estus.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Foliage/Plants/Fruit/Hysouls/Hysouls_Estus_3.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#8d7661"
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Soul_Essence",
+        "Quantity": 15
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Bonfire",
+        "Type": "Crafting",
+        "Categories": [
+          "Bonfire_Estus"
+        ],
+        "RequiredTierLevel": 3
+      }
+    ],
+    "TimeSeconds": 2
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3",
+        "FruitVeggie_TierCheck_T3"
+      ]
+    }
+  },
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0.0,
+      -26.6
+    ]
+  },
+  "Scale": 1,
+  "MaxStack": 25,
+  "DropOnDeath": true
+}

@@ -1,0 +1,35 @@
+{
+  "Container": {
+    "Type": "Multiple",
+    "Containers": [
+      {
+        "Type": "Choice",
+        "Weight": 100,
+        "Containers": [
+          {
+            "Type": "Single",
+            "Item": {
+              "ItemId": "Food_Fish_Raw",
+          "QuantityMin": 2,
+          "QuantityMax": 4
+            }
+          }
+        ]
+      },
+	  {
+        "Type": "Choice",
+        "Weight": 100,
+        "Containers": [
+          {
+            "Type": "Single",
+            "Item": {
+              "ItemId": "Ingredient_Soul_Essence",
+              "QuantityMin": 2,
+              "QuantityMax": 2
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

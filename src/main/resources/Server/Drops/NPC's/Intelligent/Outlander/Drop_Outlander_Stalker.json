@@ -1,0 +1,48 @@
+{
+  "Container": {
+    "Type": "Multiple",
+    "Containers": [
+      {
+        "Type": "Choice",
+        "Weight": 100,
+        "Containers": [
+          {
+            "Type": "Single",
+            "Item": {
+              "ItemId": "Ingredient_Fabric_Scrap_Shadoweave",
+              "QuantityMin": 1,
+              "QuantityMax": 4
+            }
+          }
+        ]
+      },
+      {
+        "Type": "Choice",
+        "Weight": 5,
+        "Containers": [
+          {
+            "Weight": 50,
+            "Type": "Single",
+            "Item": {
+            "ItemId": "Weapon_Crossbow_Iron"
+            }
+          }
+        ]
+      },
+	  {
+        "Type": "Choice",
+        "Weight": 100,
+        "Containers": [
+          {
+            "Type": "Single",
+            "Item": {
+              "ItemId": "Ingredient_Soul_Essence",
+              "QuantityMin": 5,
+              "QuantityMax": 5
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

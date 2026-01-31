@@ -4,7 +4,7 @@
 
 Hy-Souls aims to bring Souls-like gameplay to Hytale through popular mechanics and gameplay loops.
 
-**Version 0.0.5**
+**Version 0.0.6**
 
 ## Implemented
 

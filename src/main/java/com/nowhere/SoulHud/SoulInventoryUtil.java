@@ -1,4 +1,4 @@
-package me.nowhere.HySouls.SoulHud;
+package com.nowhere.SoulHud;
 
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;

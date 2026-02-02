@@ -136,7 +136,7 @@
           }
         },
         "Tier3": {
-          "CustomModel": "Blocks/Benches/Hysouls/Hysouls_Bonfire.blockymodel",
+          "CustomModel": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire.blockymodel",
           "CustomModelTexture": [
             {
               "Texture": "Blocks/Benches/Hysouls/Bonfire/Hysouls_Bonfire_Texture.png",

@@ -29,7 +29,7 @@
             }
           }
         ]
-      }
+      },
 	  {
         "Type": "Choice",
         "Weight": 100,

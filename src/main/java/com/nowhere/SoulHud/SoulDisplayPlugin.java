@@ -1,4 +1,4 @@
-package me.nowhere.HySouls.SoulHud;
+package com.nowhere.SoulHud;
 
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;

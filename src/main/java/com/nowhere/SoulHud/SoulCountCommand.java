@@ -1,4 +1,4 @@
-package me.nowhere.HySouls.SoulHud;
+package com.nowhere.SoulHud;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;

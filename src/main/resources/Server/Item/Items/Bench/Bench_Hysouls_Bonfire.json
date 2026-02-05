@@ -13,7 +13,7 @@
         "Quantity": 1,
         "ItemId": "Weapon_Sword_Iron"
       },
-	  {
+      {
         "ItemId": "Ingredient_Soul_Essence",
         "Quantity": 20
       }
@@ -48,7 +48,6 @@
     "Bench": {
       "Type": "Crafting",
       "Categories": [
-
         {
           "Id": "Bonfire_Estus",
           "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Estus.png",

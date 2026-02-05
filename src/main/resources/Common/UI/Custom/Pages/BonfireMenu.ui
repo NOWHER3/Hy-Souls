@@ -1,0 +1,125 @@
+// Dark Souls Style Bonfire Menu
+@TextColor = #c4b998;
+@SelectedColor = #e8dcc0;
+@HoverBg = #ffffff(0.08);
+@MenuBg = #0a0a08(0.92);
+@LineColor = #ffffff(0.09);
+
+Group {
+  // Full screen container
+  Anchor: (Full: 0);
+
+  // Menu panel - positioned left side
+  Group {
+    Background: (Color: @MenuBg);
+    Anchor: (Width: 280, Height: 280, Left: 80);
+
+    // Notebook lines layer (behind content)
+    Group {
+      Anchor: (Full: 0);
+      LayoutMode: Top;
+      Padding: (Top: 28);
+
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+    }
+
+    // Content layer
+    Group {
+      Anchor: (Full: 0);
+      LayoutMode: Top;
+      Padding: (Top: 30, Bottom: 30, Left: 30, Right: 30);
+
+      TextButton #TextButton53d0dc1c {
+        Anchor: (Height: 36);
+        Text: "Level Up";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+
+      TextButton #AttuneMagic {
+        Anchor: (Height: 36);
+        Text: "Attune Magic";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+
+      TextButton #TextButton9f6b71fa {
+        Anchor: (Height: 36);
+        Text: "Reverse Hollowing";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+
+      TextButton #TextButton640bb5a9 {
+        Anchor: (Height: 36);
+        Text: "Kindle";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+
+      // Spacer
+      Group {
+        FlexWeight: 1;
+      }
+
+      TextButton #CancelTextButton23e43fbe {
+        Anchor: (Height: 36);
+        Text: "Leave";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+    }
+  }
+}

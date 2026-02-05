@@ -2,6 +2,7 @@ package com.nowhere.SoulHud;
 
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.nowhere.SoulHud.command.SoulCountCommand;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Level;

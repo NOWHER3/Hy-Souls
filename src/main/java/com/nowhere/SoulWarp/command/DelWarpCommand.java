@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.nowhere.SoulWarp.WarpManager;
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 public class DelWarpCommand extends AbstractPlayerCommand {
     private final WarpManager warpManager;
@@ -25,11 +26,12 @@ public class DelWarpCommand extends AbstractPlayerCommand {
     }
 
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef player, @Nonnull World world) {
+        UUID playerUuid = player.getUuid();
         String name = (String)context.get(this.nameArg);
-        if (this.warpManager.getWarp(name) == null) {
+        if (this.warpManager.getWarp(playerUuid, name) == null) {
             player.sendMessage(Message.raw("Warp " + name + " not found!"));
         } else {
-            this.warpManager.deleteWarp(name);
+            this.warpManager.deleteWarp(playerUuid, name);
             player.sendMessage(Message.raw("Warp " + name + " deleted!"));
         }
     }

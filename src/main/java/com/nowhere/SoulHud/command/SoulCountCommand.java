@@ -1,4 +1,4 @@
-package com.nowhere.SoulHud;
+package com.nowhere.SoulHud.command;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.nowhere.SoulHud.SoulInventoryUtil;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class SoulCountCommand extends AbstractPlayerCommand {

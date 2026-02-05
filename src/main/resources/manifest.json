@@ -12,7 +12,9 @@
     }
   ],
   "Website": "",
-  "Dependencies": {},
+  "Dependencies": {
+    "Hytale:EntityModule": "*"
+  },
   "OptionalDependencies": {},
   "LoadBefore": {},
   "DisabledByDefault": false,

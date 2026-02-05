@@ -35,7 +35,7 @@ public final class SoulInventoryUtil {
                             }
 
                             String id = stack.getItemId();
-                            if (id != null && looksLikeArrow(id)) {
+                            if (id != null && looksLikeSoul(id)) {
                                 total += stack.getQuantity();
                             }
                         }
@@ -47,7 +47,7 @@ public final class SoulInventoryUtil {
         }
     }
 
-    private static boolean looksLikeArrow(String itemId) {
+    private static boolean looksLikeSoul(String itemId) {
         return itemId.toLowerCase().contains("soul_essence");
     }
 }

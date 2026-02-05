@@ -30,7 +30,7 @@ public class SetWarpCommand extends AbstractPlayerCommand {
         String name = (String)context.get(this.nameArg);
         Vector3d pos = player.getTransform().getPosition();
         Vector3f rot = player.getHeadRotation();
-        this.warpManager.createWarp(name, player.getWorldUuid(), pos.x, pos.y, pos.z, rot.getYaw(), rot.getPitch());
+        this.warpManager.createWarp(player.getUuid(), name, player.getWorldUuid(), pos.x, pos.y, pos.z, rot.getYaw(), rot.getPitch());
         player.sendMessage(Message.raw("Warp " + name + " set successfully."));
     }
 }

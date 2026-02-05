@@ -45,7 +45,7 @@ public class WarpCommand extends AbstractPlayerCommand {
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef player, @Nonnull World world) {
         UUID playerUuid = player.getUuid();
         String name = (String)context.get(this.nameArg);
-        WarpModel warp = this.warpManager.getWarp(name);
+        WarpModel warp = this.warpManager.getWarp(playerUuid, name);
         if (warp == null) {
             player.sendMessage(Message.raw("Warp not found: " + name));
         } else if (!warp.worldUuid.equals(player.getWorldUuid())) {

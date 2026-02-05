@@ -71,13 +71,6 @@ tasks.register("buildInfo") {
         println("Group: ${project.group}")
         println("Output: ${tasks.jar.get().destinationDirectory.get()}")
         println("=========================================")
-        println("")
-        println("MultipleHUD Integration: Optional")
-        println("  - Works without MultipleHUD installed")
-        println("  - Auto-detects and uses if available")
-        println("  - Install MultipleHUD for compatibility")
-        println("    with other HUD mods")
-        println("=========================================")
     }
 }
 

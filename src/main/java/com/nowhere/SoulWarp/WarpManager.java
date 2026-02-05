@@ -21,15 +21,14 @@ public class WarpManager {
         } else {
             this.warmingUp.remove(uuid);
         }
-
     }
 
     public int getWarmup() {
-        return WarpConfigManager.get().warmup;
+        return WarpConfigManager.getGlobalConfig().warmup;
     }
 
     public int getCooldown() {
-        return WarpConfigManager.get().cooldown;
+        return WarpConfigManager.getGlobalConfig().cooldown;
     }
 
     public long getRemainingCooldown(UUID uuid) {
@@ -47,22 +46,72 @@ public class WarpManager {
         }
     }
 
-    public void createWarp(String name, UUID worldUuid, double x, double y, double z, float yaw, float pitch) {
+    public void createWarp(UUID userUuid, String name, UUID worldUuid, double x, double y, double z, float yaw, float pitch) {
         WarpModel warp = new WarpModel(name, worldUuid, x, y, z, yaw, pitch);
-        WarpConfigManager.get().warps.put(name, warp);
-        WarpConfigManager.save();
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        userConfig.warps.put(name, warp);
+        WarpConfigManager.saveUserConfig(userUuid);
     }
 
-    public void deleteWarp(String name) {
-        WarpConfigManager.get().warps.remove(name);
-        WarpConfigManager.save();
+    /**
+     * Creates a warp with an associated block position.
+     * Used for block-based warps like bonfires where we need to track the block location.
+     */
+    public void createWarp(UUID userUuid, String name, UUID worldUuid, double x, double y, double z, float yaw, float pitch,
+                           int blockX, int blockY, int blockZ) {
+        WarpModel warp = new WarpModel(name, worldUuid, x, y, z, yaw, pitch, blockX, blockY, blockZ);
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        userConfig.warps.put(name, warp);
+        WarpConfigManager.saveUserConfig(userUuid);
     }
 
-    public WarpModel getWarp(String name) {
-        return (WarpModel)WarpConfigManager.get().warps.get(name);
+    public void deleteWarp(UUID userUuid, String name) {
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        userConfig.warps.remove(name);
+        WarpConfigManager.saveUserConfig(userUuid);
     }
 
-    public Collection<String> getWarpNames() {
-        return WarpConfigManager.get().warps.keySet();
+    public WarpModel getWarp(UUID userUuid, String name) {
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        return userConfig.warps.get(name);
+    }
+
+    public Collection<String> getWarpNames(UUID userUuid) {
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        return userConfig.warps.keySet();
+    }
+
+    /**
+     * Finds a warp by its associated block position.
+     * Returns null if no warp matches the given block coordinates.
+     */
+    public WarpModel findWarpByBlockPosition(UUID userUuid, int blockX, int blockY, int blockZ) {
+        UserWarpsConfig userConfig = WarpConfigManager.getUserConfig(userUuid);
+        for (WarpModel warp : userConfig.warps.values()) {
+            if (warp.matchesBlockPosition(blockX, blockY, blockZ)) {
+                return warp;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Deletes a warp that matches the given block position.
+     * Returns the deleted warp, or null if no matching warp was found.
+     */
+    public WarpModel deleteWarpByBlockPosition(UUID userUuid, int blockX, int blockY, int blockZ) {
+        WarpModel warp = findWarpByBlockPosition(userUuid, blockX, blockY, blockZ);
+        if (warp != null) {
+            deleteWarp(userUuid, warp.name);
+        }
+        return warp;
+    }
+
+    /**
+     * Generates a unique bonfire warp name based on block coordinates.
+     * Format: bonfire_x_y_z
+     */
+    public static String generateBonfireName(int blockX, int blockY, int blockZ) {
+        return String.format("bonfire_%d_%d_%d", blockX, blockY, blockZ);
     }
 }

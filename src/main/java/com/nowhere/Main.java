@@ -13,11 +13,14 @@ import com.nowhere.SoulWarp.command.SetWarpCommand;
 import com.nowhere.SoulWarp.command.WarpCommand;
 import com.nowhere.SoulWarp.event.PlaceBlockSystem;
 import com.nowhere.SoulWarp.event.BreakBlockSystem;
+import com.nowhere.SoulMenu.interaction.OpenBonfireMenuInteraction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("unused") // Instantiated by Hytale plugin framework via manifest.json
 public class Main extends JavaPlugin {
 
     private static final Path DATA_DIR = Path.of("mods", "Hysouls");
@@ -49,6 +52,9 @@ public class Main extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PlaceBlockSystem(warpManager));
         this.getEntityStoreRegistry().registerSystem(new BreakBlockSystem(warpManager));
 
+        // Register bonfire menu interaction
+        this.getCodecRegistry(Interaction.CODEC)
+                .register("OpenBonfireMenu", OpenBonfireMenuInteraction.class, OpenBonfireMenuInteraction.CODEC);
 
         // Initialize SoulHud components
         this.getLogger().at(Level.INFO).log("Setup Complete!");

@@ -185,6 +185,7 @@
     "AmbientSoundEventId": "SFX_Campfire_Default_Loop",
     "Looping": true,
     "Interactions": {
+      "Ability3": "Root_OpenBonfireMenu",
       "Collision": {
         "Cooldown": {
           "Id": "BurnEffect",

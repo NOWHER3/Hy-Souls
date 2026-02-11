@@ -3,7 +3,7 @@
   "Name": "Hy-Souls",
   "Version": "0.0.7",
   "Description": "Adds a Soul Counter",
-  "Main": "com.nowhere.Main",
+  "Main": "com.nowhere.hysouls.Main",
   "Authors": [
     {
       "Name": "Nowhere",

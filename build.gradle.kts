@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "com.nowhere.plugin"
+group = "com.nowhere.hysouls"
 version = "0.0.7"
 
 repositories {

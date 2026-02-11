@@ -1,0 +1,71 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ingredient_Hysouls_Humanity_Essence_Concentrated.name"
+  },
+  "Parent": "Ingredient_Life_Essence",
+  "Icon": "Icons/ItemsGenerated/Hysouls/Ingredient/Life_Essence_Recipes/Ingredient_Hysouls_Humanity_Essence_Concentrated.png",
+  "Quality": "Rare",
+  "Model": "Resources/Ingredients/Essence_Concentrated.blockymodel",
+  "Texture": "Resources/Ingredients/Essence_Textures/Hysouls/Ingredient_Hysouls_Humanity_Essence_Texture.png",
+  "IconProperties": {
+    "Scale": 0.6,
+    "Rotation": [
+      0,
+      0,
+      0
+    ],
+    "Translation": [
+      0,
+      -13
+    ]
+  },
+  "Scale": 0.55,
+  "Light": {
+    "Color": "#130",
+    "Radius": 1
+  },
+  "MaxStack": 100,
+  "DropOnDeath": false,
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 100
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Ingredient_Life_Essence_Concentrated",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Farmingbench",
+        "Categories": [
+          "Essence"
+        ]
+      }
+    ],
+    "OutputQuantity": 1
+  },
+  "Particles": [
+    {
+      "SystemId": "Seeds_Eternal"
+    }
+  ],
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "ConsumeHumanityEssence",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  }
+}

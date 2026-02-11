@@ -1,0 +1,85 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Potion_Hysouls_Estus.name",
+    "Description": "server.items.Potion_Hysouls_Estus.description"
+  },
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "Consume": {
+        "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink_FPS.blockyanim",
+        "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink.blockyanim",
+        "Speed": 1,
+        "Looping": true
+      }
+    }
+  },
+  "Categories": [
+    "Items.Potions"
+  ],
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Hysouls/Potion/Estus/Potion_Hysouls_Estus.png",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Potion"
+  },
+  "InteractionVars": {
+    "RemoveEffect": {
+      "Interactions": [
+        { "Type": "Simple" }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3"
+      ]
+    },
+    "ConsumeSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consume_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Health_Potion_Low_Drink"
+          }
+        }
+      ]
+    },
+    "ConsumedSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consumed_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Potion_Drink_Success"
+          }
+        }
+      ]
+    }
+  },
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Potions/Hysouls/Estus/Potion_Hysouls_Estus.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Potions/Hysouls/Estus/Potion_Hysouls_Estus.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#8d7661"
+  },
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [22.5, 45, 22.5],
+    "Translation": [0.0, -26.6]
+  },
+  "Consumable": true,
+  "Tags": {
+    "Type": ["Potion"]
+  },
+  "Scale": 1,
+  "MaxStack": 5,
+  "DropOnDeath": false
+}

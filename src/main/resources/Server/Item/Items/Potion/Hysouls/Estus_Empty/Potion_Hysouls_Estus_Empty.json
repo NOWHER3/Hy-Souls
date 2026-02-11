@@ -1,0 +1,34 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Potion_Hysouls_Estus_Empty.name",
+    "Description": "server.items.Potion_Hysouls_Estus_Empty.description"
+  },
+  "Categories": [
+    "Items.Potions"
+  ],
+  "Quality": "Common",
+  "Icon": "Icons/ItemsGenerated/Hysouls/Potion/Estus/Potion_Hysouls_Estus_Empty.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Potions/Hysouls/Estus/Potion_Hysouls_Estus.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Potions/Hysouls/Estus/Potion_Hysouls_Estus_Empty.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#8d7661"
+  },
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [22.5, 45, 22.5],
+    "Translation": [0.0, -26.6]
+  },
+  "Tags": {
+    "Type": ["Potion"]
+  },
+  "Scale": 1,
+  "MaxStack": 1,
+  "DropOnDeath": false
+}

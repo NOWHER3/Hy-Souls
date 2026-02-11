@@ -12,8 +12,15 @@ import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.nowhere.SoulCurrency.SoulManager;
+import com.nowhere.SoulHud.config.HudConfigManager;
+import com.nowhere.SoulHud.config.HudPositionConfig;
+import com.nowhere.Humanity.HumanityManager;
+import com.nowhere.Humanity.config.HumanityHudConfigManager;
+import com.nowhere.Humanity.config.HumanityHudPositionConfig;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -21,6 +28,7 @@ import java.util.logging.Level;
 public class SoulHudManager {
     private final JavaPlugin plugin;
     private final Map<UUID, SoulHud> activeHuds;
+    private final Set<UUID> processingPickup = ConcurrentHashMap.newKeySet();
     private boolean useMultipleHud = false;
     private Object multipleHudInstance = null;
 
@@ -31,9 +39,6 @@ public class SoulHudManager {
         this.registerListeners();
     }
 
-    /**
-     * Detect if MultipleHUD is available at runtime
-     */
     private void detectMultipleHud() {
         try {
             Class<?> multipleHudClass = Class.forName("com.buuz135.multiplehud.MultipleHUD");
@@ -77,7 +82,7 @@ public class SoulHudManager {
                     Store<EntityStore> store = ref.getStore();
                     PlayerRef playerRef = (PlayerRef) store.getComponent(ref, PlayerRef.getComponentType());
                     if (playerRef != null && playerRef.isValid()) {
-                        this.updateHudForPlayer(playerRef, player);
+                        this.handleInventoryChange(playerRef, player);
                     }
                 }
             }
@@ -85,26 +90,41 @@ public class SoulHudManager {
     }
 
     private void handlePlayerJoin(PlayerRef playerRef, Player player) {
-        if (playerRef != null && playerRef.isValid()) {
-            SoulHud hud = new SoulHud(playerRef);
+        if (playerRef == null || !playerRef.isValid()) return;
 
-            if (useMultipleHud) {
-                // Use MultipleHUD to register our HUD
-                setHudViaMultipleHud(player, playerRef, hud);
-            } else {
-                // Fallback to standard HUD (may conflict with other mods)
-                player.getHudManager().setCustomHud(playerRef, hud);
-            }
+        // Load soul counter for this player
+        SoulManager.load(playerRef.getUuid());
 
-            this.activeHuds.put(playerRef.getUuid(), hud);
-            this.updateHudForPlayer(playerRef, player);
+        // Migrate any existing soul items in inventory to the counter
+        Inventory inventory = player.getInventory();
+        int existingSouls = SoulInventoryUtil.removeSouls(inventory);
+        if (existingSouls > 0) {
+            SoulManager.addSouls(playerRef.getUuid(), existingSouls);
         }
+
+        // Load humanity counter for this player
+        HumanityManager.load(playerRef.getUuid());
+
+        SoulHud hud = new SoulHud(playerRef);
+
+        // Load HUD position configs (applied during build(), not via update())
+        HudPositionConfig posConfig = HudConfigManager.load(playerRef.getUuid());
+        hud.setPositionConfig(posConfig);
+
+        HumanityHudPositionConfig humanityPosConfig = HumanityHudConfigManager.load(playerRef.getUuid());
+        hud.setHumanityPositionConfig(humanityPosConfig);
+
+        if (useMultipleHud) {
+            setHudViaMultipleHud(player, playerRef, hud);
+        } else {
+            player.getHudManager().setCustomHud(playerRef, hud);
+        }
+
+        this.activeHuds.put(playerRef.getUuid(), hud);
+        this.updateHudForPlayer(playerRef);
+        this.updateHumanityDisplay(playerRef.getUuid());
     }
 
-    /**
-     * Use reflection to call MultipleHUD.getInstance().setCustomHud()
-     * This avoids compile-time dependency issues
-     */
     private void setHudViaMultipleHud(Player player, PlayerRef playerRef, SoulHud hud) {
         try {
             Class<?> multipleHudClass = multipleHudInstance.getClass();
@@ -118,28 +138,88 @@ public class SoulHudManager {
             setCustomHud.invoke(multipleHudInstance, player, playerRef, "SoulHud", hud);
         } catch (Exception e) {
             this.plugin.getLogger().at(Level.SEVERE).log("Failed to set HUD via MultipleHUD: " + e.getMessage());
-            // Fallback to standard method
             player.getHudManager().setCustomHud(playerRef, hud);
         }
     }
 
     private void handlePlayerLeave(PlayerRef playerRef) {
         if (playerRef != null) {
+            SoulManager.unload(playerRef.getUuid());
+            HudConfigManager.unload(playerRef.getUuid());
+            HumanityManager.unload(playerRef.getUuid());
+            HumanityHudConfigManager.unload(playerRef.getUuid());
             this.activeHuds.remove(playerRef.getUuid());
         }
     }
 
-    private void updateHudForPlayer(PlayerRef playerRef, Player player) {
+    private void handleInventoryChange(PlayerRef playerRef, Player player) {
+        UUID uuid = playerRef.getUuid();
+
+        // Guard against re-entrancy (removing items triggers another inventory change event)
+        if (!processingPickup.add(uuid)) return;
         try {
             Inventory inventory = player.getInventory();
-            int soulCount = SoulInventoryUtil.countSouls(inventory);
+            int soulsInInventory = SoulInventoryUtil.countSouls(inventory);
+            if (soulsInInventory > 0) {
+                SoulInventoryUtil.removeSouls(inventory);
+                SoulManager.addSouls(uuid, soulsInInventory);
+            }
+            this.updateHudForPlayer(playerRef);
+        } catch (Exception ex) {
+            ((HytaleLogger.Api) this.plugin.getLogger().at(Level.WARNING).withCause(ex))
+                    .log("Error processing soul pickup for player " + uuid);
+        } finally {
+            processingPickup.remove(uuid);
+        }
+    }
+
+    private void updateHudForPlayer(PlayerRef playerRef) {
+        try {
+            int soulCount = SoulManager.getSouls(playerRef.getUuid());
             SoulHud hud = this.activeHuds.get(playerRef.getUuid());
             if (hud != null) {
                 hud.updateSoulCount(soulCount);
             }
         } catch (Exception ex) {
-            ((HytaleLogger.Api)this.plugin.getLogger().at(Level.WARNING).withCause(ex))
-                    .log("Error updating HUD for player " + String.valueOf(playerRef.getUuid()));
+            ((HytaleLogger.Api) this.plugin.getLogger().at(Level.WARNING).withCause(ex))
+                    .log("Error updating HUD for player " + playerRef.getUuid());
+        }
+    }
+
+    public void applyConfig(UUID uuid) {
+        SoulHud hud = this.activeHuds.get(uuid);
+        if (hud != null) {
+            HudPositionConfig config = HudConfigManager.load(uuid);
+            hud.applyPosition(config);
+        }
+    }
+
+    public void toggleHud(UUID uuid) {
+        SoulHud hud = this.activeHuds.get(uuid);
+        if (hud != null) {
+            hud.setVisible(!hud.isVisible());
+        }
+    }
+
+    public void updateHumanityDisplay(UUID playerId) {
+        SoulHud hud = this.activeHuds.get(playerId);
+        if (hud != null) {
+            hud.updateHumanityCount(HumanityManager.getHumanity(playerId));
+        }
+    }
+
+    public void applyHumanityConfig(UUID uuid) {
+        SoulHud hud = this.activeHuds.get(uuid);
+        if (hud != null) {
+            HumanityHudPositionConfig config = HumanityHudConfigManager.load(uuid);
+            hud.applyHumanityPosition(config);
+        }
+    }
+
+    public void toggleHumanityHud(UUID uuid) {
+        SoulHud hud = this.activeHuds.get(uuid);
+        if (hud != null) {
+            hud.setHumanityVisible(!hud.isHumanityVisible());
         }
     }
 

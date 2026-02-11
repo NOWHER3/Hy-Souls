@@ -56,20 +56,24 @@ tasks.jar {
 }
 
 tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:unchecked")
+    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
     options.encoding = "UTF-8"
 }
 
 // Custom task to display build information
 tasks.register("buildInfo") {
+    val projectName = project.name
+    val projectVersion = project.version
+    val projectGroup = project.group
+    val outputDir = tasks.jar.get().destinationDirectory.get()
     doLast {
         println("=========================================")
         println("  SoulDisplay Build Information")
         println("=========================================")
-        println("Name: ${project.name}")
-        println("Version: ${project.version}")
-        println("Group: ${project.group}")
-        println("Output: ${tasks.jar.get().destinationDirectory.get()}")
+        println("Name: $projectName")
+        println("Version: $projectVersion")
+        println("Group: $projectGroup")
+        println("Output: $outputDir")
         println("=========================================")
     }
 }

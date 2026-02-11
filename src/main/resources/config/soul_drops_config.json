@@ -1,0 +1,123 @@
+{
+  "enabled": true,
+  "categories": {
+    "Void": {
+      "tags": ["Void"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 1200,
+          "chance": 1.0
+        }
+      }
+    },
+    "Undead": {
+      "tags": ["Undead", "Skeleton", "Zombie"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 900,
+          "chance": 1.0
+        }
+      }
+    },
+    "Intelligent": {
+      "tags": [
+        "Trork_Chieftain", "Trork_Warrior", "Trork_Spar", "Trork", "Trork_Underlings",
+        "Outlander_Marauder", "Outlander", "Outlander_Spar", "Outlander_Underlings",
+        "Goblin_Lobber", "Goblin", "Goblin_Scrapper", "Goblin_No_Bosses", "Edible_Goblin_Scrapper",
+        "Scarak", "Kweebec", "Kweebec_Civilian", "Kweebec_Pets", "Kweebec_Prisoner",
+        "Feran", "Feran_Civilian"
+      ],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 700,
+          "chance": 1.0
+        }
+      }
+    },
+    "Beast": {
+      "tags": [
+        "Fen_Stalker", "Aggressive", "Predators", "PredatorsBig",
+        "Spiders", "Snakes", "Scorpions", "Neutral", "Warthog", "Boar"
+      ],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 450,
+          "chance": 1.0
+        }
+      }
+    },
+    "Wildlife": {
+      "tags": ["Prey", "PreyBig", "FlockPrey", "Deer", "Moose", "Bison", "Ram", "Mouflon"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 180,
+          "chance": 1.0
+        }
+      }
+    },
+    "Livestock": {
+      "tags": ["Livestock", "Pig", "Sheep", "Goat", "Cow", "Horse", "Camel"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 90,
+          "chance": 1.0
+        }
+      }
+    },
+    "Flying_Critter": {
+      "tags": ["Birds", "Flock", "Chicken", "Chicken_Desert", "Turkey"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 80,
+          "chance": 1.0
+        }
+      }
+    },
+    "Aquatic": {
+      "tags": ["Aquatic"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 75,
+          "chance": 1.0
+        }
+      }
+    },
+    "Critter": {
+      "tags": ["Critters", "Vermin", "Mouse", "Rat", "Edible_Rat", "Rabbit", "Bunny", "Skrill"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 70,
+          "chance": 1.0
+        }
+      }
+    },
+    "Passive": {
+      "tags": ["Passive"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 50,
+          "chance": 1.0
+        }
+      }
+    },
+    "default": {
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 100,
+          "chance": 1.0
+        }
+      }
+    }
+  }
+}

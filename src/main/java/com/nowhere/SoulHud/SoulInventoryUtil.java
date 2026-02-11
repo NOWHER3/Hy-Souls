@@ -47,7 +47,38 @@ public final class SoulInventoryUtil {
         }
     }
 
+    /**
+     * Removes all soul essence items from all inventory sections.
+     * Returns the total quantity removed.
+     */
+    public static int removeSouls(@Nullable Inventory inventory) {
+        if (inventory == null) return 0;
+        int total = 0;
+        ItemContainer[] sections = new ItemContainer[]{
+                inventory.getHotbar(), inventory.getStorage(),
+                inventory.getBackpack(), inventory.getUtility(), inventory.getTools()
+        };
+        for (ItemContainer section : sections) {
+            if (section == null) continue;
+            short capacity = section.getCapacity();
+            for (short slot = 0; slot < capacity; slot++) {
+                ItemStack stack = section.getItemStack(slot);
+                if (stack == null) continue;
+                String id = stack.getItemId();
+                if (id != null && looksLikeSoul(id)) {
+                    int qty = stack.getQuantity();
+                    if (qty > 0) {
+                        section.removeItemStackFromSlot(slot);
+                        total += qty;
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     private static boolean looksLikeSoul(String itemId) {
-        return itemId.toLowerCase().contains("soul_essence");
+        String lower = itemId.toLowerCase();
+        return lower.contains("soul_essence") && !lower.contains("soul_essence_hard");
     }
 }

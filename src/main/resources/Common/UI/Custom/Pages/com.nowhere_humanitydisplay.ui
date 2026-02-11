@@ -1,0 +1,9 @@
+Group #HumanityHUD {
+  Background: PatchStyle(TexturePath: "HumanityCounterUI.png");
+
+  Label #HumanityCount {
+    Style: (FontSize: 24, HorizontalAlignment: Center);
+    Anchor: (Top: 22, Left: 0, Right: 0, Height: 30);
+    Text: "00";
+  }
+}

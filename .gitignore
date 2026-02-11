@@ -50,3 +50,4 @@ decompiled-server/
 ### Claude ###
 .claudeconfig
 CLAUDE.md
+/.claude/settings.local.json

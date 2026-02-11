@@ -33,6 +33,8 @@ Group {
       Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
       Group { Anchor: (Height: 35); }
       Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
     }
 
     // Content layer
@@ -89,6 +91,21 @@ Group {
       TextButton #TextButton640bb5a9 {
         Anchor: (Height: 36);
         Text: "Kindle";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+
+      TextButton #CraftButton {
+        Anchor: (Height: 36);
+        Text: "Craft";
         Style: (
           Default: (
             Background: (Color: #00000000),

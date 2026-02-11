@@ -1,0 +1,135 @@
+// Hy-Souls Help Guide - Dark Souls Theme
+@TextColor = #c4b998;
+@SelectedColor = #e8dcc0;
+@HoverBg = #ffffff(0.08);
+@MenuBg = #0a0a08(0.92);
+@LineColor = #ffffff(0.09);
+
+Group {
+  // Full screen container
+  Anchor: (Full: 0);
+
+  // Menu panel - positioned left side
+  Group {
+    Background: (Color: @MenuBg);
+    Anchor: (Width: 320, Height: 460, Left: 80);
+
+    // Notebook lines layer (behind content)
+    Group {
+      Anchor: (Full: 0);
+      LayoutMode: Top;
+      Padding: (Top: 28);
+
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+      Group { Anchor: (Height: 35); }
+      Group { Anchor: (Height: 1); Background: (Color: @LineColor); }
+    }
+
+    // Content layer
+    Group {
+      Anchor: (Full: 0);
+      LayoutMode: Top;
+      Padding: (Top: 30, Bottom: 30, Left: 30, Right: 30);
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "Hy-Souls Guide";
+        Style: (TextColor: @SelectedColor, FontSize: 18, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/soulcount  —  Show your soul count";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/togglesoulhud  —  Toggle soul HUD";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/soulhudpos  —  Set HUD position";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/warp <name>  —  Teleport to a warp";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/setwarp <name>  —  Save a new warp";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/delwarp <name>  —  Delete a warp";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/warps  —  List all your warps";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/bmenu  —  Open bonfire menu";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      Label {
+        Anchor: (Height: 36);
+        Text: "/hysouls  —  Show this guide";
+        Style: (TextColor: @TextColor, FontSize: 13, HorizontalAlignment: Start, VerticalAlignment: Center);
+      }
+
+      // Spacer
+      Group {
+        FlexWeight: 1;
+      }
+
+      TextButton #LeaveButton {
+        Anchor: (Height: 36);
+        Text: "Leave";
+        Style: (
+          Default: (
+            Background: (Color: #00000000),
+            LabelStyle: (TextColor: @TextColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          ),
+          Hovered: (
+            Background: (Color: @HoverBg),
+            LabelStyle: (TextColor: @SelectedColor, FontSize: 16, HorizontalAlignment: Start, VerticalAlignment: Center)
+          )
+        );
+      }
+    }
+  }
+}

@@ -105,6 +105,12 @@ public class SoulHudManager {
         // Load humanity counter for this player
         HumanityManager.load(playerRef.getUuid());
 
+        // Migrate any existing soft humanity items in inventory to the counter
+        int existingHumanity = com.nowhere.hysouls.currency.humanity.HumanityInventoryUtil.removeHumanity(inventory);
+        if (existingHumanity > 0) {
+            HumanityManager.addHumanity(playerRef.getUuid(), existingHumanity);
+        }
+
         SoulHud hud = new SoulHud(playerRef);
 
         // Load HUD position configs (applied during build(), not via update())
@@ -159,15 +165,30 @@ public class SoulHudManager {
         if (!processingPickup.add(uuid)) return;
         try {
             Inventory inventory = player.getInventory();
+
+            // Handle soul essence pickup
             int soulsInInventory = SoulInventoryUtil.countSouls(inventory);
             if (soulsInInventory > 0) {
                 SoulInventoryUtil.removeSouls(inventory);
                 SoulManager.addSouls(uuid, soulsInInventory);
             }
+
+            // Handle humanity essence pickup
+            int humanityInInventory = com.nowhere.hysouls.currency.humanity.HumanityInventoryUtil.countHumanity(inventory);
+            if (humanityInInventory > 0) {
+                com.nowhere.hysouls.currency.humanity.HumanityInventoryUtil.removeHumanity(inventory);
+                HumanityManager.addHumanity(uuid, humanityInInventory);
+            }
+
             this.updateHudForPlayer(playerRef);
+
+            // Update humanity HUD if humanity was picked up
+            if (humanityInInventory > 0) {
+                this.updateHumanityDisplay(uuid);
+            }
         } catch (Exception ex) {
             ((HytaleLogger.Api) this.plugin.getLogger().at(Level.WARNING).withCause(ex))
-                    .log("Error processing soul pickup for player " + uuid);
+                    .log("Error processing currency pickup for player " + uuid);
         } finally {
             processingPickup.remove(uuid);
         }
@@ -198,6 +219,13 @@ public class SoulHudManager {
         SoulHud hud = this.activeHuds.get(uuid);
         if (hud != null) {
             hud.setVisible(!hud.isVisible());
+        }
+    }
+
+    public void updateSoulDisplay(UUID playerId) {
+        SoulHud hud = this.activeHuds.get(playerId);
+        if (hud != null) {
+            hud.updateSoulCount(SoulManager.getSouls(playerId));
         }
     }
 

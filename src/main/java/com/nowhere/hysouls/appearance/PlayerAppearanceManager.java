@@ -3,24 +3,15 @@ package com.nowhere.hysouls.appearance;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.modules.entity.player.PlayerSkinComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import java.util.UUID;
 
 /**
  * Manages player appearance transformations between human and hollow states.
- *
- * Note: Due to Hytale's current cosmetic system limitations, we cannot dynamically
- * change player skin textures. This is a placeholder for when the API supports it.
- *
- * TODO: Implement actual skin changes when Hytale adds PlayerSkinComponent modification API
- *       - Apply hollow texture from Common/Characters/ based on hollow state
- *       - Update makeHollow() to apply hollow skin texture
- *       - Update reverseHollowing() to restore original player skin
+ * Uses PlayerModelChanger to replace the ModelComponent with hollow/original models.
  */
 public final class PlayerAppearanceManager {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -28,21 +19,15 @@ public final class PlayerAppearanceManager {
     private PlayerAppearanceManager() {}
 
     /**
-     * Update a player's appearance based on their hollow state.
-     *
-     * Currently this just sends a message to the player since we cannot
-     * modify skin textures at runtime with the current Hytale API.
+     * Apply hollow model only. Does not change hollow state.
+     * Safe to call when player is already hollow and just needs the visual applied.
      */
-    public static void updateAppearance(Store<EntityStore> store, Ref<EntityStore> playerRef, UUID playerId) {
-        boolean isHollow = HollowManager.isHollow(playerId);
-
-        Player player = store.getComponent(playerRef, Player.getComponentType());
-        if (player != null) {
-            if (isHollow) {
-                LOGGER.atInfo().log("Player %s is hollow (visual change not yet supported)", playerId);
-            } else {
-                LOGGER.atInfo().log("Player %s is human", playerId);
-            }
+    public static void applyHollowModel(Store<EntityStore> store, Ref<EntityStore> playerRef, UUID playerId) {
+        boolean success = PlayerModelChanger.applyHollowModel(store, playerRef);
+        if (success) {
+            LOGGER.atInfo().log("Player %s hollow model applied", playerId);
+        } else {
+            LOGGER.atWarning().log("Player %s hollow model application failed", playerId);
         }
     }
 
@@ -50,21 +35,38 @@ public final class PlayerAppearanceManager {
      * Make a player hollow and update their appearance.
      */
     public static void makeHollow(Store<EntityStore> store, Ref<EntityStore> playerRef, UUID playerId) {
+        // Set hollow state
         HollowManager.makeHollow(playerId);
 
+        // Apply hollow model
+        boolean modelSuccess = PlayerModelChanger.applyHollowModel(store, playerRef);
+
+        // Send message to player
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player != null) {
-            player.sendMessage(Message.raw("You have become hollow...").color("#8B0000"));
+            if (modelSuccess) {
+                player.sendMessage(Message.raw("You have become hollow...").color("#8B0000"));
+            } else {
+                player.sendMessage(Message.raw("You have become hollow... (visual change failed)").color("#8B0000"));
+            }
         }
 
-        LOGGER.atInfo().log("Player %s became hollow", playerId);
+        LOGGER.atInfo().log("Player %s became hollow (model applied: %s)", playerId, modelSuccess);
     }
 
     /**
      * Reverse hollowing and restore human appearance.
      */
     public static void reverseHollowing(Store<EntityStore> store, Ref<EntityStore> playerRef, UUID playerId) {
+        // Reverse hollow state
         HollowManager.reverseHollowing(playerId);
-        LOGGER.atInfo().log("Player %s reversed hollowing", playerId);
+
+        // Restore original model
+        boolean success = PlayerModelChanger.restoreOriginalModel(store, playerRef);
+        if (success) {
+            LOGGER.atInfo().log("Player %s reversed hollowing and restored original model", playerId);
+        } else {
+            LOGGER.atWarning().log("Player %s reversed hollowing but model restoration failed", playerId);
+        }
     }
 }

@@ -1,4 +1,5 @@
 items.Bench_Hysouls_Bonfire.name = Bonfire
+interactionHints.restAtBonfire = Press Interact to REST at Bonfire
 
 items.Ingredient_Hysouls_Soul_Essence.name = Soul
 
@@ -24,15 +25,21 @@ items.Ingredient_Soul_Essence_Hard_8.description = Consume for 8000 souls
 items.Ingredient_Soul_Essence_Hard_9.description = Consume for 10000 souls
 items.Ingredient_Soul_Essence_Hard_10.description = Consume for 20000 souls
 
+
 items.Potion_Hysouls_Estus.name = Estus
 
+items.Ingredient_Hysouls_Humanity_Essence.name = Humanity
 items.Ingredient_Hysouls_Humanity_Essence_Concentrated.name = Humanity
-
-items.Ingredient_Hysouls_Humanity_Essence_Concentrated.description = Consume for 1 humanity
+items.Ingredient_Hysouls_Humanity_Essence_Concentrated.description = Consume for 1 Humanity
 
 items.Ingredient_Hysouls_Bar_Thorium.name = Thorium Bar
 items.Ingredient_Hysouls_Bar_Adamantite.name = Adamantite Bar
 items.Ingredient_Hysouls_Bar_Cobalt.name = Cobalt Bar
+items.Ingredient_Hysouls_Bar_Copper.name = Copper Bar
+items.Ingredient_Hysouls_Bar_Gold.name = Gold Bar
+items.Ingredient_Hysouls_Bar_Iron.name = Iron Bar
+items.Ingredient_Hysouls_Bar_Mithril.name = Mithril Bar
+items.Ingredient_Hysouls_Bar_Silver.name = Silver Bar
 
 items.Potion_Hysouls_Estus.description = Instant Heal III + Health Regen III
 

@@ -35,8 +35,9 @@ public class HollowEventHandler {
                     UUID playerId = playerRef.getUuid();
 
                     HollowManager.load(playerId);
+                    com.nowhere.hysouls.warp.SpawnPointManager.load(playerId);
 
-                    // Update appearance on join
+                    // Update appearance on join (no need to capture - PlayerSkinComponent already stores original)
                     checkAndUpdateHollowState(store, ref, playerId);
                 }
             }
@@ -48,6 +49,7 @@ public class HollowEventHandler {
             if (playerRef != null) {
                 UUID playerId = playerRef.getUuid();
                 HollowManager.unload(playerId);
+                com.nowhere.hysouls.warp.SpawnPointManager.unload(playerId);
             }
         });
     }
@@ -63,11 +65,11 @@ public class HollowEventHandler {
         // If humanity is 0 and not already hollow, make them hollow
         if (humanity == 0 && !isHollow) {
             PlayerAppearanceManager.makeHollow(store, playerRef, playerId);
+        } else if (isHollow) {
+            // Already hollow: ensure hollow model is applied
+            PlayerAppearanceManager.applyHollowModel(store, playerRef, playerId);
         }
-        // If they have humanity but are hollow, keep them hollow until they reverse it at bonfire
-        else {
-            // Just update appearance to match current state
-            PlayerAppearanceManager.updateAppearance(store, playerRef, playerId);
-        }
+        // Non-hollow players: don't touch ModelComponent — replacing it via
+        // store.putComponent() loses engine animation state and breaks death animation
     }
 }

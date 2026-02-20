@@ -1,6 +1,6 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Ingredient_Hysouls_Bar_Cobalt.name"
+    "Name": "server.items.Ingredient_Hysouls_Bar_Copper.name"
   },
   "Categories": [
     "Items"
@@ -20,18 +20,18 @@
         "Categories": [
           "Bonfire_Soul_Essence_Shop"
         ],
-        "RequiredTierLevel": 2
+        "RequiredTierLevel": 1
       }
     ]
   },
+  "Model": "Resources/Materials/Ingot.blockymodel",
+  "Texture": "Resources/Materials/Ingot_Textures/Copper.png",
+  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Copper.png",
   "ResourceTypes": [
     {
       "Id": "Metal_Bars"
     }
   ],
-  "Model": "Resources/Materials/Ingot.blockymodel",
-  "Texture": "Resources/Materials/Ingot_Textures/Cobalt.png",
-  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Cobalt.png",
   "PlayerAnimationsId": "Item",
   "IconProperties": {
     "Scale": 1,

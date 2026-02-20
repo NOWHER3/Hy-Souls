@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import com.nowhere.hysouls.config.PlayerData;
+import com.nowhere.hysouls.config.PlayerDataManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,53 +21,53 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Manages warp configuration.
+ * Global config stored in server/warpconfig.json.
+ * Per-player warps stored in PlayerData (data/ folder).
+ */
 public final class WarpConfigManager {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final String GLOBAL_CONFIG_FILE_NAME = "config.json";
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static SoulWarpsConfig globalConfig;
-    private static Path dataDirectory;
     private static Path globalConfigPath;
-    private static Path usersDirectory;
     private static final Map<UUID, UserWarpsConfig> userConfigs = new HashMap<>();
 
-    private WarpConfigManager() {
-    }
+    private WarpConfigManager() {}
 
     public static void init(JavaPlugin pluginInstance, Path dataDir) {
-        dataDirectory = dataDir.resolve("warps");
-        globalConfigPath = dataDirectory.resolve("config.json");
-        usersDirectory = dataDirectory.resolve("users");
+        // Global config now in server/ folder
+        globalConfigPath = dataDir.resolve("server").resolve("warpconfig.json");
 
         // Migrate old config if exists
         Path oldConfigPath = dataDir.resolve("warps.json");
-        ConfigMigration.migrate(oldConfigPath);
+        com.nowhere.hysouls.warp.ConfigMigration.migrate(oldConfigPath);
 
         loadGlobalConfig();
     }
 
     private static void loadGlobalConfig() {
         if (globalConfigPath == null) {
-            ((HytaleLogger.Api)LOGGER.atWarning()).log("WarpConfigManager not initialized, using default config");
+            LOGGER.atWarning().log("WarpConfigManager not initialized, using default config");
             globalConfig = new SoulWarpsConfig();
         } else if (!Files.exists(globalConfigPath, new LinkOption[0])) {
-            ((HytaleLogger.Api)LOGGER.atInfo()).log("Global warps config file not found, creating default config");
+            LOGGER.atInfo().log("Global warps config file not found, creating default config");
             globalConfig = new SoulWarpsConfig();
             saveGlobalConfig();
         } else {
             try (
-                    InputStream is = Files.newInputStream(globalConfigPath);
-                    Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+                InputStream is = Files.newInputStream(globalConfigPath);
+                Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             ) {
-                globalConfig = (SoulWarpsConfig)GSON.fromJson(reader, SoulWarpsConfig.class);
+                globalConfig = GSON.fromJson(reader, SoulWarpsConfig.class);
                 if (globalConfig == null) {
-                    ((HytaleLogger.Api)LOGGER.atWarning()).log("Global warps config file was empty, using default config");
+                    LOGGER.atWarning().log("Global warps config file was empty, using default config");
                     globalConfig = new SoulWarpsConfig();
                 }
 
-                ((HytaleLogger.Api)LOGGER.atInfo()).log("Global warps configuration loaded successfully");
+                LOGGER.atInfo().log("Global warps configuration loaded from server/warpconfig.json");
             } catch (Exception e) {
-                ((HytaleLogger.Api)LOGGER.atSevere()).log("Failed to load global warps configuration: " + e.getMessage());
+                LOGGER.atSevere().log("Failed to load global warps configuration: " + e.getMessage());
                 globalConfig = new SoulWarpsConfig();
             }
         }
@@ -75,87 +78,56 @@ public final class WarpConfigManager {
             try {
                 Files.createDirectories(globalConfigPath.getParent());
                 if (Files.exists(globalConfigPath, new LinkOption[0])) {
-                    Path backupPath = globalConfigPath.resolveSibling("config.json.bak");
+                    Path backupPath = globalConfigPath.resolveSibling("warpconfig.json.bak");
                     Files.copy(globalConfigPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
                 }
 
                 try (Writer writer = Files.newBufferedWriter(globalConfigPath, StandardCharsets.UTF_8)) {
                     GSON.toJson(globalConfig, writer);
                 }
+                LOGGER.atFine().log("Saved global warps configuration to server/warpconfig.json");
             } catch (IOException e) {
-                ((HytaleLogger.Api)LOGGER.atSevere()).log("Failed to save global warps configuration: " + e.getMessage());
+                LOGGER.atSevere().log("Failed to save global warps configuration: " + e.getMessage());
             }
         } else {
-            ((HytaleLogger.Api)LOGGER.atWarning()).log("Cannot save global config: WarpConfigManager not initialized");
+            LOGGER.atWarning().log("Cannot save global config: WarpConfigManager not initialized");
         }
     }
 
+    /**
+     * Loads user warps from PlayerData (data/ folder).
+     */
     public static UserWarpsConfig loadUserConfig(UUID userUuid) {
         // Check if already loaded
         if (userConfigs.containsKey(userUuid)) {
             return userConfigs.get(userUuid);
         }
 
-        if (usersDirectory == null) {
-            ((HytaleLogger.Api)LOGGER.atWarning()).log("WarpConfigManager not initialized, using default user config");
-            UserWarpsConfig config = new UserWarpsConfig();
-            userConfigs.put(userUuid, config);
-            return config;
-        }
+        // Load from PlayerData
+        PlayerData data = PlayerDataManager.getPlayerData(userUuid);
+        UserWarpsConfig config = new UserWarpsConfig();
+        config.warps = new HashMap<>(data.warps);
 
-        Path userConfigPath = usersDirectory.resolve(userUuid.toString() + ".json");
-
-        if (!Files.exists(userConfigPath, new LinkOption[0])) {
-            ((HytaleLogger.Api)LOGGER.atInfo()).log("User warps config file not found for %s, creating new", userUuid);
-            UserWarpsConfig config = new UserWarpsConfig();
-            userConfigs.put(userUuid, config);
-            saveUserConfig(userUuid);
-            return config;
-        }
-
-        try (
-                InputStream is = Files.newInputStream(userConfigPath);
-                Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-        ) {
-            UserWarpsConfig config = (UserWarpsConfig)GSON.fromJson(reader, UserWarpsConfig.class);
-            if (config == null) {
-                ((HytaleLogger.Api)LOGGER.atWarning()).log("User warps config file was empty for %s, using default config", userUuid);
-                config = new UserWarpsConfig();
-            }
-
-            userConfigs.put(userUuid, config);
-            ((HytaleLogger.Api)LOGGER.atInfo()).log("User warps configuration loaded successfully for %s", userUuid);
-            return config;
-        } catch (Exception e) {
-            ((HytaleLogger.Api)LOGGER.atSevere()).log("Failed to load user warps configuration for %s: %s", userUuid, e.getMessage());
-            UserWarpsConfig config = new UserWarpsConfig();
-            userConfigs.put(userUuid, config);
-            return config;
-        }
+        userConfigs.put(userUuid, config);
+        LOGGER.atFine().log("Loaded user warps for %s from PlayerData: %d warps", userUuid, config.warps.size());
+        return config;
     }
 
+    /**
+     * Saves user warps to PlayerData (data/ folder).
+     */
     public static void saveUserConfig(UUID userUuid) {
         UserWarpsConfig config = userConfigs.get(userUuid);
-        if (usersDirectory == null || config == null) {
-            ((HytaleLogger.Api)LOGGER.atWarning()).log("Cannot save user config for %s: WarpConfigManager not initialized or config not loaded", userUuid);
+        if (config == null) {
+            LOGGER.atWarning().log("Cannot save user warps for %s: config not loaded", userUuid);
             return;
         }
 
-        try {
-            Files.createDirectories(usersDirectory);
-            Path userConfigPath = usersDirectory.resolve(userUuid.toString() + ".json");
+        PlayerData data = PlayerDataManager.getPlayerData(userUuid);
+        data.warps = new HashMap<>(config.warps);
+        PlayerDataManager.savePlayerData(userUuid);
 
-            if (Files.exists(userConfigPath, new LinkOption[0])) {
-                Path backupPath = userConfigPath.resolveSibling(userUuid.toString() + ".json.bak");
-                Files.copy(userConfigPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            try (Writer writer = Files.newBufferedWriter(userConfigPath, StandardCharsets.UTF_8)) {
-                GSON.toJson(config, writer);
-            }
-        } catch (IOException e) {
-            ((HytaleLogger.Api)LOGGER.atSevere()).log("Failed to save user warps configuration for %s: %s", userUuid, e.getMessage());
-        }
+        LOGGER.atFine().log("Saved user warps for %s to PlayerData: %d warps", userUuid, config.warps.size());
     }
 
     public static void unloadUserConfig(UUID userUuid) {
@@ -189,7 +161,5 @@ public final class WarpConfigManager {
 
         globalConfig = null;
         globalConfigPath = null;
-        dataDirectory = null;
-        usersDirectory = null;
     }
 }

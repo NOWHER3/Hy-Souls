@@ -61,8 +61,6 @@ public class PlaceBlockSystem extends EntityEventSystem<EntityStore, PlaceBlockE
                 rot.getYaw(), rot.getPitch(),
                 blockX, blockY, blockZ
         );
-
-        playerRef.sendMessage(Message.raw("Bonfire warp '" + warpName + "' set."));
     }
 
     @NullableDecl

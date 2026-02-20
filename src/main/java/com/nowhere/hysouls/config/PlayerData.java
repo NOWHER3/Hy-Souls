@@ -25,4 +25,7 @@ public class PlayerData {
 
     @SerializedName("Warps")
     public Map<String, WarpModel> warps = new HashMap<>();
+
+    @SerializedName("RespawnBonfire")
+    public String respawnBonfire = null;  // Warp name (e.g., "bonfire_123_64_456")
 }

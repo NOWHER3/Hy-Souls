@@ -1,6 +1,6 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Ingredient_Hysouls_Bar_Cobalt.name"
+    "Name": "server.items.Ingredient_Hysouls_Bar_Mithril.name"
   },
   "Categories": [
     "Items"
@@ -20,7 +20,7 @@
         "Categories": [
           "Bonfire_Soul_Essence_Shop"
         ],
-        "RequiredTierLevel": 2
+        "RequiredTierLevel": 3
       }
     ]
   },
@@ -30,8 +30,7 @@
     }
   ],
   "Model": "Resources/Materials/Ingot.blockymodel",
-  "Texture": "Resources/Materials/Ingot_Textures/Cobalt.png",
-  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Cobalt.png",
+  "Texture": "Resources/Materials/Ingot_Textures/Mithril.png",
   "PlayerAnimationsId": "Item",
   "IconProperties": {
     "Scale": 1,
@@ -45,6 +44,7 @@
       22.5
     ]
   },
+  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Mithril.png",
   "Tags": {
     "Type": [
       "Ingredient"

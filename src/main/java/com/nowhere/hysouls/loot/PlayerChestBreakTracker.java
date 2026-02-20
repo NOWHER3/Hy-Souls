@@ -1,4 +1,4 @@
-package com.nowhere.hysouls.warp.event;
+package com.nowhere.hysouls.loot;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -6,22 +6,21 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.nowhere.hysouls.warp.WarpManager;
-import com.nowhere.hysouls.warp.WarpModel;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
-public class BreakBlockSystem extends EntityEventSystem<EntityStore, BreakBlockEvent> {
-    private final WarpManager warpManager;
+/**
+ * Removes broken chests from the player-placed blacklist.
+ * This allows world-gen chests at the same coordinates to be populated later.
+ */
+public class PlayerChestBreakTracker extends EntityEventSystem<EntityStore, BreakBlockEvent> {
 
-    public BreakBlockSystem(WarpManager warpManager) {
+    public PlayerChestBreakTracker() {
         super(BreakBlockEvent.class);
-        this.warpManager = warpManager;
     }
 
     @Override
@@ -31,24 +30,20 @@ public class BreakBlockSystem extends EntityEventSystem<EntityStore, BreakBlockE
                        @NonNullDecl CommandBuffer<EntityStore> commandBuffer,
                        @NonNullDecl BreakBlockEvent breakBlockEvent) {
         BlockType blockType = breakBlockEvent.getBlockType();
-        if (blockType == null || !blockType.getId().equals("Bench_Hysouls_Bonfire")) {
+        if (blockType == null) {
             return;
         }
 
-        var reference = archetypeChunk.getReferenceTo(id);
-        PlayerRef playerRef = store.getComponent(reference, PlayerRef.getComponentType());
+        // Check if the broken block is a chest (any type of chest)
+        String blockTypeId = blockType.getId();
+        if (!blockTypeId.toLowerCase().contains("chest")) {
+            return;
+        }
 
-        // Get the block position that is being broken
+        // Remove the chest from the player-placed blacklist
         Vector3i blockPos = breakBlockEvent.getTargetBlock();
-        int blockX = blockPos.x;
-        int blockY = blockPos.y;
-        int blockZ = blockPos.z;
-
-        // Find and delete the warp associated with this specific block position
-        this.warpManager.deleteWarpByBlockPosition(
-                playerRef.getUuid(),
-                blockX, blockY, blockZ
-        );
+        String chestId = blockPos.x + "," + blockPos.y + "," + blockPos.z;
+        PlayerPlacedChestTracker.removeFromBlacklist(chestId);
     }
 
     @NullableDecl

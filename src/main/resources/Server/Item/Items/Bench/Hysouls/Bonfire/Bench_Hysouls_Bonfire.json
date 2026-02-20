@@ -33,6 +33,7 @@
     "Furniture.Benches"
   ],
   "BlockType": {
+    "InteractionHint": "server.interactionHints.restAtBonfire",
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",

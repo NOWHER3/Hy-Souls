@@ -1,40 +1,24 @@
 package com.nowhere.hysouls.currency.humanity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.nowhere.hysouls.config.PlayerData;
+import com.nowhere.hysouls.config.PlayerDataManager;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Manages humanity currency for players.
+ * Uses PlayerDataManager (data/ folder) for persistence.
+ */
 public final class HumanityManager {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final Type INT_TYPE = new TypeToken<Integer>(){}.getType();
     private static final ConcurrentHashMap<UUID, AtomicInteger> humanityCounts = new ConcurrentHashMap<>();
-    private static Path dataDirectory;
+    private static final int STARTING_HUMANITY = 0; // Players start hollow with 0 humanity
+    private static final int MAX_HUMANITY = 99; // Maximum humanity cap
 
     private HumanityManager() {}
-
-    public static void init(Path baseDir) {
-        dataDirectory = baseDir.resolve("humanity");
-        try {
-            Files.createDirectories(dataDirectory);
-        } catch (IOException e) {
-            LOGGER.atSevere().log("Failed to create humanity directory: %s", e.getMessage());
-        }
-    }
 
     public static int getHumanity(UUID playerId) {
         AtomicInteger counter = humanityCounts.get(playerId);
@@ -42,50 +26,39 @@ public final class HumanityManager {
     }
 
     public static void addHumanity(UUID playerId, int amount) {
+        if (amount == 0) return;
+        AtomicInteger counter = humanityCounts.computeIfAbsent(playerId, k -> new AtomicInteger(0));
+        // Cap at MAX_HUMANITY
+        counter.updateAndGet(current -> Math.min(MAX_HUMANITY, current + amount));
+        save(playerId);
+    }
+
+    public static void removeHumanity(UUID playerId, int amount) {
         if (amount <= 0) return;
-        humanityCounts.computeIfAbsent(playerId, k -> new AtomicInteger(0)).addAndGet(amount);
+        AtomicInteger counter = humanityCounts.get(playerId);
+        if (counter == null) return;
+
+        // Ensure humanity doesn't go below 0
+        counter.updateAndGet(current -> Math.max(0, current - amount));
         save(playerId);
     }
 
     public static void load(UUID playerId) {
-        if (dataDirectory == null) {
-            humanityCounts.computeIfAbsent(playerId, k -> new AtomicInteger(0));
-            return;
-        }
-
-        Path filePath = dataDirectory.resolve(playerId.toString() + ".json");
-        if (!Files.exists(filePath, new LinkOption[0])) {
-            humanityCounts.put(playerId, new AtomicInteger(0));
-            return;
-        }
-
-        try (Reader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
-            Integer count = GSON.fromJson(reader, INT_TYPE);
-            humanityCounts.put(playerId, new AtomicInteger(count != null ? count : 0));
-        } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to load humanity data for %s: %s", playerId, e.getMessage());
-            humanityCounts.put(playerId, new AtomicInteger(0));
-        }
+        PlayerData data = PlayerDataManager.getPlayerData(playerId);
+        // Cap at MAX_HUMANITY when loading
+        int cappedCount = Math.min(MAX_HUMANITY, data.humanity);
+        humanityCounts.put(playerId, new AtomicInteger(cappedCount));
+        LOGGER.atFine().log("Loaded %d humanity for %s", cappedCount, playerId);
     }
 
     public static void save(UUID playerId) {
-        if (dataDirectory == null) return;
         AtomicInteger counter = humanityCounts.get(playerId);
         if (counter == null) return;
 
-        Path filePath = dataDirectory.resolve(playerId.toString() + ".json");
-        try {
-            Files.createDirectories(dataDirectory);
-            if (Files.exists(filePath, new LinkOption[0])) {
-                Path backup = filePath.resolveSibling(playerId.toString() + ".json.bak");
-                Files.copy(filePath, backup, StandardCopyOption.REPLACE_EXISTING);
-            }
-            try (Writer writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
-                GSON.toJson(counter.get(), writer);
-            }
-        } catch (IOException e) {
-            LOGGER.atSevere().log("Failed to save humanity data for %s: %s", playerId, e.getMessage());
-        }
+        PlayerData data = PlayerDataManager.getPlayerData(playerId);
+        data.humanity = counter.get();
+        PlayerDataManager.savePlayerData(playerId);
+        LOGGER.atFine().log("Saved %d humanity for %s", counter.get(), playerId);
     }
 
     public static void unload(UUID playerId) {
@@ -98,6 +71,5 @@ public final class HumanityManager {
             save(playerId);
         }
         humanityCounts.clear();
-        dataDirectory = null;
     }
 }

@@ -57,8 +57,6 @@ public class SoulDropsSystem extends DeathSystems.OnDeathSystem {
             return;
         }
 
-        System.out.println("[SoulDrops] NPC death: roleIndex=" + roleIndex + " category=" + category);
-
         // Get drop position (NPC location)
         TransformComponent transform = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
         if (transform == null) {
@@ -82,7 +80,6 @@ public class SoulDropsSystem extends DeathSystems.OnDeathSystem {
             int quantity = itemDrop.getAmount();
 
             if (quantity > 0) {
-                System.out.println("[SoulDrops]   -> dropping " + quantity + "x " + itemDrop.getItemId());
                 itemsToDrop.add(new ItemStack(itemDrop.getItemId(), quantity));
             }
         }
@@ -101,7 +98,7 @@ public class SoulDropsSystem extends DeathSystems.OnDeathSystem {
                     commandBuffer.addEntities(dropEntities, AddReason.SPAWN);
                 }
             } catch (Exception e) {
-                System.err.println("[SoulDrops] Error spawning drops for category '" + category + "': " + e.getMessage());
+                // Silent failure
             }
         }
     }

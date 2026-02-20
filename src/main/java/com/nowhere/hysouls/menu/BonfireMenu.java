@@ -10,6 +10,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.Window;
@@ -20,7 +21,12 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.meta.BlockState;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.nowhere.hysouls.appearance.HollowManager;
+import com.nowhere.hysouls.appearance.ReverseHollowingService;
+import com.nowhere.hysouls.currency.humanity.HumanityManager;
 import com.nowhere.hysouls.currency.soul.SoulCraftingWindow;
+import com.nowhere.hysouls.menu.kindle.KindleManager;
+import com.nowhere.hysouls.Main;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -75,10 +81,14 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
             case "Leave":
                 this.close();
                 break;
+            case "ReverseHollowing":
+                handleReverseHollowing(ref, store);
+                break;
+            case "Kindle":
+                handleKindle(ref, store);
+                break;
             case "LevelUp":
             case "AttuneMagic":
-            case "ReverseHollowing":
-            case "Kindle":
                 // TODO: implement these features
                 break;
         }
@@ -112,5 +122,70 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
 
         Window[] windows = new Window[]{ new SoulCraftingWindow(benchState, uuid) };
         player.getPageManager().setPageWithWindows(ref, store, Page.Bench, true, windows);
+    }
+
+    private void handleReverseHollowing(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        if (playerRef == null) {
+            this.close();
+            return;
+        }
+
+        UUID playerId = playerRef.getUuid();
+        ReverseHollowingService.reverseHollowing(store, ref, playerId);
+    }
+
+    private void handleKindle(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (blockPosition == null) {
+            this.close();
+            return;
+        }
+
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (playerRef == null || player == null) {
+            this.close();
+            return;
+        }
+
+        UUID playerId = playerRef.getUuid();
+
+        // Check if player is in human form (not hollow)
+        if (HollowManager.isHollow(playerId)) {
+            player.sendMessage(Message.raw("You must be in human form to kindle a bonfire. Reverse hollowing first.").color("#FF6347"));
+            return;
+        }
+
+        // Check if bonfire can be kindled (not at max level)
+        if (!KindleManager.canKindle(playerId, blockPosition)) {
+            player.sendMessage(Message.raw("Bonfire is already kindled to maximum capacity (20 Estus).").color("#FFD700"));
+            return;
+        }
+
+        // Get humanity cost for next kindle level
+        int humanityCost = KindleManager.getKindleCost(playerId, blockPosition);
+        int currentHumanity = HumanityManager.getHumanity(playerId);
+        int nextEstusAmount = KindleManager.getNextEstusAmount(playerId, blockPosition);
+
+        // Check if player has enough humanity
+        if (currentHumanity < humanityCost) {
+            player.sendMessage(Message.raw(String.format("You need %d humanity to kindle this bonfire.", humanityCost)).color("#FF6347"));
+            return;
+        }
+
+        // Deduct humanity and kindle the bonfire
+        HumanityManager.removeHumanity(playerId, humanityCost);
+        KindleManager.kindleBonfire(playerId, blockPosition);
+
+        // Update humanity HUD display
+        if (Main.get().getHudManager() != null) {
+            Main.get().getHudManager().updateHumanityDisplay(playerId);
+        }
+
+        // Send confirmation message
+        player.sendMessage(Message.raw(String.format("Bonfire kindled! Estus flask capacity increased to %d.", nextEstusAmount)).color("#FFD700"));
+
+        // Recharge estus immediately with new amount
+        Main.get().getBonfireRestService().restAtBonfire(ref, store, blockPosition);
     }
 }

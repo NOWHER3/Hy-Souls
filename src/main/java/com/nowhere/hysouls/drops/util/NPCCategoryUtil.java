@@ -14,10 +14,8 @@ public class NPCCategoryUtil {
     public static void initialize() {
         try {
             tagSetLookup = TagSetPlugin.get(NPCGroup.class);
-            System.out.println("[SoulDrops] NPCCategoryUtil initialized");
         } catch (Exception e) {
-            System.err.println("[SoulDrops] Failed to initialize TagSetPlugin: " + e.getMessage());
-            e.printStackTrace();
+            // Silent failure - will use default category
         }
     }
 
@@ -57,21 +55,16 @@ public class NPCCategoryUtil {
             if (tags != null && tags.length > 0) {
                 for (String tag : tags) {
                     if (roleInGroup(tag, roleIndex)) {
-                        System.out.println("[SoulDrops] RoleIndex " + roleIndex +
-                                " matched tag '" + tag + "' -> category: " + categoryName);
                         return categoryName;
                     }
                 }
             } else {
                 if (roleInGroup(categoryName, roleIndex)) {
-                    System.out.println("[SoulDrops] RoleIndex " + roleIndex +
-                            " matched tag '" + categoryName + "' -> category: " + categoryName);
                     return categoryName;
                 }
             }
         }
 
-        System.out.println("[SoulDrops] No category match for roleIndex " + roleIndex + ", using default");
         return "default";
     }
 

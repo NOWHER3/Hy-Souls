@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SoulDropConfigManager {
-    private static final String CONFIG_DIR = "mods/Hysouls/drops";
+    private static final String CONFIG_DIR = "mods/Hysouls/server";
     private static final String CONFIG_FILE = "soul_drops_config.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -30,11 +30,9 @@ public class SoulDropConfigManager {
             // Load config from file
             try (Reader reader = Files.newBufferedReader(configPath)) {
                 config = GSON.fromJson(reader, SoulDropConfig.class);
-                System.out.println("[SoulDrops] Config loaded successfully");
             }
 
         } catch (Exception e) {
-            System.err.println("[SoulDrops] Failed to load config, using defaults: " + e.getMessage());
             config = createDefaultConfig();
         }
     }
@@ -52,7 +50,6 @@ public class SoulDropConfigManager {
                 while ((bytesRead = in.read(buffer)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }
-                System.out.println("[SoulDrops] Created default config file");
             }
         } else {
             // No bundled config, create programmatic default
@@ -74,14 +71,64 @@ public class SoulDropConfigManager {
         // Create default category drops programmatically
         java.util.Map<String, SoulDropConfig.CategoryDrops> categories = new java.util.HashMap<>();
 
-        // Default category
+        // Elite category (tags: "Elite", "Champion", "Veteran")
+        SoulDropConfig.CategoryDrops eliteDrops = new SoulDropConfig.CategoryDrops();
+        eliteDrops.setTags(new String[]{"Elite", "Champion", "Veteran"});
+        java.util.Map<String, SoulDropConfig.ItemDrop> eliteItems = new java.util.HashMap<>();
+
+        SoulDropConfig.ItemDrop eliteSoul = new SoulDropConfig.ItemDrop();
+        eliteSoul.setItemId("Ingredient_Hysouls_Soul_Essence_Hard_5");
+        eliteSoul.setAmount(1);
+        eliteSoul.setChance(1.0);
+        eliteItems.put("soul_essence", eliteSoul);
+
+        SoulDropConfig.ItemDrop eliteHumanity = new SoulDropConfig.ItemDrop();
+        eliteHumanity.setItemId("Ingredient_Hysouls_Humanity_Essence_Concentrated");
+        eliteHumanity.setAmount(1);
+        eliteHumanity.setChance(0.25); // 25% chance for elite NPCs
+        eliteItems.put("humanity_essence", eliteHumanity);
+
+        eliteDrops.setDrops(eliteItems);
+        categories.put("elite", eliteDrops);
+
+        // Boss category (tags: "Boss", "MiniBoss", "BossMinion")
+        SoulDropConfig.CategoryDrops bossDrops = new SoulDropConfig.CategoryDrops();
+        bossDrops.setTags(new String[]{"Boss", "MiniBoss", "BossMinion"});
+        java.util.Map<String, SoulDropConfig.ItemDrop> bossItems = new java.util.HashMap<>();
+
+        SoulDropConfig.ItemDrop bossSoul = new SoulDropConfig.ItemDrop();
+        bossSoul.setItemId("Ingredient_Hysouls_Soul_Essence_Hard_10");
+        bossSoul.setAmount(1);
+        bossSoul.setChance(1.0);
+        bossItems.put("soul_essence", bossSoul);
+
+        SoulDropConfig.ItemDrop bossHumanity = new SoulDropConfig.ItemDrop();
+        bossHumanity.setItemId("Ingredient_Hysouls_Humanity_Essence_Concentrated");
+        bossHumanity.setAmount(1);
+        bossHumanity.setChance(0.5); // 50% chance for boss NPCs
+        bossItems.put("humanity_essence", bossHumanity);
+
+        bossDrops.setDrops(bossItems);
+        categories.put("boss", bossDrops);
+
+        // Default category (common NPCs)
         SoulDropConfig.CategoryDrops defaultDrops = new SoulDropConfig.CategoryDrops();
         java.util.Map<String, SoulDropConfig.ItemDrop> defaultItems = new java.util.HashMap<>();
+
+        // Soul essence drop (always)
         SoulDropConfig.ItemDrop defaultSoul = new SoulDropConfig.ItemDrop();
         defaultSoul.setItemId("Ingredient_Hysouls_Soul_Essence");
         defaultSoul.setAmount(100);
         defaultSoul.setChance(1.0);
         defaultItems.put("soul_essence", defaultSoul);
+
+        // Humanity essence drop (5% chance for common NPCs)
+        SoulDropConfig.ItemDrop humanityDrop = new SoulDropConfig.ItemDrop();
+        humanityDrop.setItemId("Ingredient_Hysouls_Humanity_Essence_Concentrated");
+        humanityDrop.setAmount(1);
+        humanityDrop.setChance(0.05);
+        defaultItems.put("humanity_essence", humanityDrop);
+
         defaultDrops.setDrops(defaultItems);
         categories.put("default", defaultDrops);
 

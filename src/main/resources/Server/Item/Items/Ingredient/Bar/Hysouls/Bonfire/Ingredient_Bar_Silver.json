@@ -1,6 +1,6 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Ingredient_Hysouls_Bar_Cobalt.name"
+    "Name": "server.items.Ingredient_Hysouls_Bar_Silver.name"
   },
   "Categories": [
     "Items"
@@ -24,14 +24,14 @@
       }
     ]
   },
+  "Model": "Resources/Materials/Ingot.blockymodel",
+  "Texture": "Resources/Materials/Ingot_Textures/Silver.png",
+  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Silver.png",
   "ResourceTypes": [
     {
       "Id": "Metal_Bars"
     }
   ],
-  "Model": "Resources/Materials/Ingot.blockymodel",
-  "Texture": "Resources/Materials/Ingot_Textures/Cobalt.png",
-  "Icon": "Icons/ItemsGenerated/Ingredient_Bar_Cobalt.png",
   "PlayerAnimationsId": "Item",
   "IconProperties": {
     "Scale": 1,

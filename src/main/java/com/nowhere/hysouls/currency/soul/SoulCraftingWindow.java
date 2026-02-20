@@ -2,6 +2,7 @@ package com.nowhere.hysouls.currency.soul;
 
 import com.hypixel.hytale.builtin.crafting.state.BenchState;
 import com.hypixel.hytale.builtin.crafting.window.SimpleCraftingWindow;
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.ExtraResources;
@@ -95,9 +96,9 @@ public class SoulCraftingWindow extends SimpleCraftingWindow {
     }
 
     @Override
-    public void onClose0() {
+    public void onClose0(@Nonnull Ref<EntityStore> ref, @Nonnull ComponentAccessor<EntityStore> accessor) {
         syncCounter();
-        super.onClose0();
+        super.onClose0(ref, accessor);
     }
 
     /**

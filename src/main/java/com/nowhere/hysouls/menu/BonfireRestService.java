@@ -3,6 +3,7 @@ package com.nowhere.hysouls.menu;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatsModule;
@@ -48,48 +49,48 @@ public class BonfireRestService {
      * @param ref   Player entity reference
      * @param store Entity store
      * @param bonfirePos Bonfire position (null = default 5 estus)
-     * @return true if rest was successful, false if already processing or error occurred
+     * @return number of estus refilled, or -1 if error occurred
      */
-    public boolean restAtBonfire(Ref<EntityStore> ref, Store<EntityStore> store, @Nullable Vector3i bonfirePos) {
+    public int restAtBonfire(Ref<EntityStore> ref, Store<EntityStore> store, @Nullable Vector3i bonfirePos) {
         // Validate player ref
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerRef == null || !playerRef.isValid()) {
-            return false;
+            return -1;
         }
 
         UUID uuid = playerRef.getUuid();
 
         // Prevent concurrent rest operations for same player
         if (!processing.add(uuid)) {
-            return false;
+            return -1;
         }
 
         try {
             // Get player component
             Player player = store.getComponent(ref, Player.getComponentType());
             if (player == null) {
-                return false;
+                return -1;
             }
 
             // Perform rest operations
-            boolean estusRecharged = rechargeEstus(player, uuid, bonfirePos);
+            int estusRefilled = rechargeEstus(player, uuid, bonfirePos);
             boolean healthRestored = restoreHealth(ref, store);
             boolean staminaRestored = restoreStamina(ref, store);
 
             // Log results (for debugging, can be removed in production)
-            if (estusRecharged || healthRestored || staminaRestored) {
+            if (estusRefilled > 0 || healthRestored || staminaRestored) {
                 this.plugin.getLogger().at(Level.FINE).log(
-                    "Player %s rested at bonfire (Estus: %s, Health: %s, Stamina: %s)",
-                    uuid, estusRecharged, healthRestored, staminaRestored
+                    "Player %s rested at bonfire (Estus refilled: %d, Health: %s, Stamina: %s)",
+                    uuid, estusRefilled, healthRestored, staminaRestored
                 );
             }
 
-            return true;
+            return estusRefilled;
         } catch (Exception e) {
             this.plugin.getLogger().at(Level.WARNING).log(
                 "Error during bonfire rest for player " + uuid + ": " + e.getMessage(), e
             );
-            return false;
+            return -1;
         } finally {
             processing.remove(uuid);
         }
@@ -102,9 +103,9 @@ public class BonfireRestService {
      * @param player Player entity
      * @param uuid   Player UUID
      * @param bonfirePos Bonfire position (null = default 5 estus)
-     * @return true if estus was recharged
+     * @return number of estus refilled (0 if already full, -1 if error)
      */
-    private boolean rechargeEstus(Player player, UUID uuid, @Nullable Vector3i bonfirePos) {
+    private int rechargeEstus(Player player, UUID uuid, @Nullable Vector3i bonfirePos) {
         try {
             // Get player's configured estus slot (default slot 1 → index 0)
             EstusConfig config = EstusConfigManager.load(uuid);
@@ -115,22 +116,31 @@ public class BonfireRestService {
 
             Inventory inventory = player.getInventory();
             if (inventory == null) {
-                return false;
+                return -1;
             }
 
             ItemContainer hotbar = inventory.getHotbar();
             if (hotbar == null) {
-                return false;
+                return -1;
+            }
+
+            // Calculate how many estus were actually refilled
+            int currentEstus = 0;
+            ItemStack currentStack = hotbar.getItemStack(targetSlot);
+            if (currentStack != null && ESTUS_ITEM_ID.equals(currentStack.getItemId())) {
+                currentEstus = currentStack.getQuantity();
             }
 
             // Set full estus flask
             hotbar.setItemStackForSlot(targetSlot, new ItemStack(ESTUS_ITEM_ID, estusAmount));
-            return true;
+
+            // Return the number of estus refilled
+            return estusAmount - currentEstus;
         } catch (Exception e) {
             this.plugin.getLogger().at(Level.WARNING).log(
                 "Failed to recharge estus for player " + uuid + ": " + e.getMessage()
             );
-            return false;
+            return -1;
         }
     }
 

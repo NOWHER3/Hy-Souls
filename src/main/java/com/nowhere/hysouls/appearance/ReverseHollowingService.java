@@ -26,7 +26,7 @@ public class ReverseHollowingService {
         if (!HollowManager.isHollow(playerId)) {
             Player player = store.getComponent(playerRef, Player.getComponentType());
             if (player != null) {
-                player.sendMessage(Message.raw("You are already human!"));
+                player.sendMessage(Message.raw("You are already human."));
             }
             return false;
         }
@@ -52,8 +52,7 @@ public class ReverseHollowingService {
 
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player != null) {
-            int remaining = HumanityManager.getHumanity(playerId);
-            player.sendMessage(Message.raw("Hollowing reversed! You are human once more. (" + remaining + " humanity remaining)").color("#00FF00"));
+            player.sendMessage(Message.raw("You are human once more.").color("#00FF00"));
         }
 
         return true;

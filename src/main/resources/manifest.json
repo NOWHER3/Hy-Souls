@@ -4,6 +4,7 @@
   "Version": "0.0.7",
   "Description": "Adds a Soul Counter",
   "Main": "com.nowhere.hysouls.Main",
+  "ServerVersion": "2026.02.19-1a311a592",
   "Authors": [
     {
       "Name": "Nowhere",

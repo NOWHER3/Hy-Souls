@@ -1,25 +1,20 @@
 package com.nowhere.hysouls.death;
 
-import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
-import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.nowhere.hysouls.Main;
-import com.nowhere.hysouls.appearance.PlayerAppearanceManager;
 import com.nowhere.hysouls.currency.humanity.HumanityManager;
 import com.nowhere.hysouls.currency.soul.SoulManager;
 
@@ -30,14 +25,14 @@ import java.util.UUID;
 
 /**
  * ECS System that handles Dark Souls-style death penalties when DeathComponent is added to players.
- * - Drop all souls as items
- * - Drop all humanity as items
+ * - Drop all souls as items (queued for next tick to avoid breaking death animation)
+ * - Drop all humanity as items (queued for next tick)
  * - Become hollow (lose human form)
  */
 public class DeathPenaltySystem extends DeathSystems.OnDeathSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String SOUL_ESSENCE_ID = "Ingredient_Hysouls_Soul_Essence";
-    private static final String HUMANITY_ESSENCE_ID = "Ingredient_Hysouls_Humanity_Essence"; // Soft version that auto-increments counter
+    private static final String HUMANITY_ESSENCE_ID = "Ingredient_Hysouls_Humanity_Essence";
 
     private final Query<EntityStore> query = Query.and(Player.getComponentType());
 
@@ -65,59 +60,42 @@ public class DeathPenaltySystem extends DeathSystems.OnDeathSystem {
             int souls = SoulManager.getSouls(playerId);
             int humanity = HumanityManager.getHumanity(playerId);
 
-            // Get death position
-            Vector3d position = transform.getPosition();
-            Vector3f rotation = Vector3f.ZERO;
-
-            // Generate item drops
-            List<ItemStack> itemsToDrop = new ArrayList<>();
-
-            // Drop souls as items at death location
+            // Clear counters
             if (souls > 0) {
-                // Split into stacks of max 64
+                SoulManager.setSouls(playerId, 0);
+                LOGGER.atInfo().log("Player %s dropped %d souls on death", playerId, souls);
+            }
+            if (humanity > 0) {
+                HumanityManager.removeHumanity(playerId, humanity);
+                LOGGER.atInfo().log("Player %s dropped %d humanity on death", playerId, humanity);
+            }
+
+            // Queue item drops for next tick (spawning during death processing breaks death animation)
+            List<ItemStack> itemsToDrop = new ArrayList<>();
+            if (souls > 0) {
                 int remaining = souls;
                 while (remaining > 0) {
                     int stackSize = Math.min(remaining, 64);
                     itemsToDrop.add(new ItemStack(SOUL_ESSENCE_ID, stackSize));
                     remaining -= stackSize;
                 }
-                SoulManager.setSouls(playerId, 0); // Clear soul counter
-                LOGGER.atInfo().log("Player %s dropped %d souls on death", playerId, souls);
             }
-
-            // Drop humanity as items at death location
             if (humanity > 0) {
-                // Split into stacks of max 64
                 int remaining = humanity;
                 while (remaining > 0) {
                     int stackSize = Math.min(remaining, 64);
                     itemsToDrop.add(new ItemStack(HUMANITY_ESSENCE_ID, stackSize));
                     remaining -= stackSize;
                 }
-                HumanityManager.removeHumanity(playerId, humanity); // Clear humanity counter
-                LOGGER.atInfo().log("Player %s dropped %d humanity on death", playerId, humanity);
             }
-
-            // Spawn item entities at death location
             if (!itemsToDrop.isEmpty()) {
-                try {
-                    Holder<EntityStore>[] dropEntities = ItemComponent.generateItemDrops(
-                            store,
-                            itemsToDrop,
-                            position,
-                            rotation
-                    );
-
-                    if (dropEntities != null && dropEntities.length > 0) {
-                        commandBuffer.addEntities(dropEntities, AddReason.SPAWN);
-                    }
-                } catch (Exception e) {
-                    LOGGER.atSevere().log("Error spawning death drops: %s", e.getMessage());
-                }
+                Vector3d position = transform.getPosition();
+                DeathDropProcessor.queueDrops(playerId.toString(), itemsToDrop, position);
             }
 
-            // Make player hollow
-            PlayerAppearanceManager.makeHollow(store, ref, playerId);
+            // Set hollow state
+            com.nowhere.hysouls.appearance.HollowManager.setHollow(playerId, true);
+            LOGGER.atInfo().log("Player %s marked as hollow (appearance will update after respawn)", playerId);
 
             // Update HUDs
             if (Main.get().getHudManager() != null) {
@@ -129,6 +107,7 @@ public class DeathPenaltySystem extends DeathSystems.OnDeathSystem {
             if (souls > 0 || humanity > 0) {
                 player.sendMessage(Message.raw("You died and lost " + souls + " souls and " + humanity + " humanity.").color("#8B0000"));
             }
+            player.sendMessage(Message.raw("You will become hollow...").color("#8B0000"));
 
         } catch (Exception e) {
             LOGGER.atSevere().log("Error handling death penalty: %s", e.getMessage());

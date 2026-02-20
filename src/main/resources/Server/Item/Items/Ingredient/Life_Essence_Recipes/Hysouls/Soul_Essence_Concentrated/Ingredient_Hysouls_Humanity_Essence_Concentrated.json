@@ -1,6 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Ingredient_Hysouls_Humanity_Essence_Concentrated.name"
+    "Name": "server.items.Ingredient_Hysouls_Humanity_Essence_Concentrated.name",
+    "Description": "server.items.Ingredient_Hysouls_Humanity_Essence_Concentrated.description"
   },
   "Parent": "Ingredient_Life_Essence",
   "Icon": "Icons/ItemsGenerated/Hysouls/Ingredient/Life_Essence_Recipes/Ingredient_Hysouls_Humanity_Essence_Concentrated.png",
@@ -24,7 +25,7 @@
     "Color": "#130",
     "Radius": 1
   },
-  "MaxStack": 100,
+  "MaxStack": 99,
   "DropOnDeath": false,
   "Recipe": {
     "Input": [

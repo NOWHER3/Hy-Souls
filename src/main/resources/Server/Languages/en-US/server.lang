@@ -32,6 +32,9 @@ items.Ingredient_Hysouls_Humanity_Essence.name = Humanity
 items.Ingredient_Hysouls_Humanity_Essence_Concentrated.name = Humanity
 items.Ingredient_Hysouls_Humanity_Essence_Concentrated.description = Consume for 1 Humanity
 
+items.Consumable_Hysouls_Homeward_Bone.name = Homeward Bone
+items.Consumable_Hysouls_Homeward_Bone.description = Use to return to last bonfire rested at
+
 items.Ingredient_Hysouls_Bar_Thorium.name = Thorium Bar
 items.Ingredient_Hysouls_Bar_Adamantite.name = Adamantite Bar
 items.Ingredient_Hysouls_Bar_Cobalt.name = Cobalt Bar

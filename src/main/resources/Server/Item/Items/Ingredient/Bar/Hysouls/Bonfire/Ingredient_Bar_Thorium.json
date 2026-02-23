@@ -6,11 +6,11 @@
     "Items"
   ],
   "Recipe": {
-    "TimeSeconds": 4.5,
+    "TimeSeconds": 7,
     "Input": [
       {
         "ItemId": "Ingredient_Hysouls_Soul_Essence",
-        "Quantity": 10
+        "Quantity": 1000
       }
     ],
     "BenchRequirement": [

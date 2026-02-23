@@ -53,6 +53,16 @@
           "Id": "Bonfire_Soul_Essence_Shop",
           "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Soul_Essence.png",
           "Name": "soul essence exchange"
+        },
+        {
+          "Id": "Bonfire_Armor_Shop",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Items-Armor.png",
+          "Name": "armor"
+        },
+        {
+          "Id": "Bonfire_Merchant",
+          "Icon": "Icons/CraftingCategories/Hysouls/Bonfire/Hysouls_Estus.png",
+          "Name": "merchant"
         }
       ],
       "LocalOpenSoundEventId": "SFX_Workbench_Open",
@@ -69,10 +79,10 @@
             "Material": [
               {
                 "ItemId": "Ingredient_Hysouls_Soul_Essence",
-                "Quantity": 50
+                "Quantity": 1500
               }
             ],
-            "TimeSeconds": 5.0
+            "TimeSeconds": 8.0
           }
         },
         {
@@ -80,10 +90,10 @@
             "Material": [
               {
                 "ItemId": "Ingredient_Hysouls_Soul_Essence",
-                "Quantity": 100
+                "Quantity": 5000
               }
             ],
-            "TimeSeconds": 10.0
+            "TimeSeconds": 15.0
           },
           "CraftingTimeReductionModifier": 0.15
         },

@@ -19,6 +19,12 @@ public class SoulHud extends CustomUIHud {
     private boolean humanityVisible = true;
     private HumanityHudPositionConfig humanityPositionConfig;
 
+    // User preferences (manual toggle) vs map overlay state
+    private boolean userSoulVisible = true;
+    private boolean userHumanityVisible = true;
+    private boolean mapOpen = false;
+    private boolean bonfireMenuOpen = false;
+
     public SoulHud(PlayerRef playerRef) {
         super(playerRef);
     }
@@ -129,5 +135,43 @@ public class SoulHud extends CustomUIHud {
             anchor.setRight(Value.of(config.offset));
         }
         return anchor;
+    }
+
+    // Map visibility methods
+
+    public void setMapOpen(boolean open) {
+        if (this.mapOpen == open) return;
+        this.mapOpen = open;
+        updateVisibility();
+    }
+
+    public void setBonfireMenuOpen(boolean open) {
+        if (this.bonfireMenuOpen == open) return;
+        this.bonfireMenuOpen = open;
+        updateVisibility();
+    }
+
+    public void setUserSoulVisible(boolean visible) {
+        this.userSoulVisible = visible;
+        updateVisibility();
+    }
+
+    public boolean isUserSoulVisible() {
+        return this.userSoulVisible;
+    }
+
+    public void setUserHumanityVisible(boolean visible) {
+        this.userHumanityVisible = visible;
+        updateVisibility();
+    }
+
+    private void updateVisibility() {
+        boolean shouldHide = mapOpen || bonfireMenuOpen;
+        setVisible(userSoulVisible && !shouldHide);
+        setHumanityVisible(userHumanityVisible && !shouldHide);
+    }
+
+    public boolean isUserHumanityVisible() {
+        return this.userHumanityVisible;
     }
 }

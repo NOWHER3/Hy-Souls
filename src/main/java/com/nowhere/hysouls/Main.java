@@ -7,7 +7,7 @@ import com.nowhere.hysouls.display.soul.command.SoulHudPosCommand;
 import com.nowhere.hysouls.display.soul.command.ToggleSoulHudCommand;
 import com.nowhere.hysouls.display.soul.config.HudConfigManager;
 import com.nowhere.hysouls.menu.command.BonfireMenuCommand;
-import com.nowhere.hysouls.help.HysoulsHelpCommand;
+import com.nowhere.hysouls.display.soul.MapHudVisibilitySystem;
 import com.nowhere.hysouls.display.soul.SoulHudManager;
 import com.nowhere.hysouls.currency.soul.SoulManager;
 import com.nowhere.hysouls.warp.WarpConfigManager;
@@ -18,6 +18,8 @@ import com.nowhere.hysouls.warp.command.SetWarpCommand;
 import com.nowhere.hysouls.warp.command.WarpCommand;
 import com.nowhere.hysouls.warp.event.PlaceBlockSystem;
 import com.nowhere.hysouls.warp.event.BreakBlockSystem;
+import com.nowhere.hysouls.warp.marker.BonfireMarkerProvider;
+import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
 import com.nowhere.hysouls.menu.interaction.OpenBonfireMenuInteraction;
 import com.nowhere.hysouls.currency.soul.ConsumeSoulEssenceInteraction;
 import com.nowhere.hysouls.drops.SoulDropConfigManager;
@@ -34,6 +36,7 @@ import com.nowhere.hysouls.consumable.estus.EstusManager;
 import com.nowhere.hysouls.consumable.estus.command.EstusSlotCommand;
 import com.nowhere.hysouls.currency.humanity.HumanityManager;
 import com.nowhere.hysouls.display.humanity.HumanityHudManager;
+import com.nowhere.hysouls.consumable.homewardbone.HomewardBoneTeleportInteraction;
 import com.nowhere.hysouls.currency.humanity.ConsumeHumanityEssenceInteraction;
 import com.nowhere.hysouls.display.humanity.config.HumanityHudConfigManager;
 import com.nowhere.hysouls.display.humanity.command.HumanityCountCommand;
@@ -110,6 +113,11 @@ public class Main extends JavaPlugin {
         // Initialize SoulWarp components (uses separate config - NOT migrated)
         WarpConfigManager.init(this, DATA_DIR);
 
+        // Register bonfire map markers on world load
+        this.getEventRegistry().registerGlobal(AddWorldEvent.class,
+                event -> event.getWorld().getWorldMapManager().addMarkerProvider(
+                        "bonfireMarkers", new BonfireMarkerProvider()));
+
         WarpManager warpManager = new WarpManager();
         this.getCommandRegistry().registerCommand(new WarpCommand(warpManager));
         this.getCommandRegistry().registerCommand(new SetWarpCommand(warpManager));
@@ -138,6 +146,8 @@ public class Main extends JavaPlugin {
                 .register("ConsumeSoulEssence", ConsumeSoulEssenceInteraction.class, ConsumeSoulEssenceInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
                 .register("ConsumeHumanityEssence", ConsumeHumanityEssenceInteraction.class, ConsumeHumanityEssenceInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+                .register("HomewardBoneTeleport", HomewardBoneTeleportInteraction.class, HomewardBoneTeleportInteraction.CODEC);
 
         // Register Humanity commands
         this.getCommandRegistry().registerCommand(new HumanityCountCommand());
@@ -162,6 +172,9 @@ public class Main extends JavaPlugin {
         this.postRespawnAppearanceSystem = new PostRespawnAppearanceSystem();
         this.getEntityStoreRegistry().registerSystem(this.postRespawnAppearanceSystem);
         this.getLogger().at(Level.INFO).log("PostRespawnAppearanceSystem registered.");
+
+        // Register map-based HUD visibility system (hides HUD when map is open)
+        this.getEntityStoreRegistry().registerSystem(new MapHudVisibilitySystem());
 
         // Register SoulHud commands
         this.getCommandRegistry().registerCommand(new SoulCountCommand());
@@ -196,7 +209,6 @@ public class Main extends JavaPlugin {
         }
 
         this.getCommandRegistry().registerCommand(new BonfireMenuCommand());
-        this.getCommandRegistry().registerCommand(new HysoulsHelpCommand());
 
         this.getLogger().at(Level.INFO).log("Setup Complete!");
     }

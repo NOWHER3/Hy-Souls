@@ -8,11 +8,11 @@
   "Model": "Resources/Materials/Ingot.blockymodel",
   "Texture": "Resources/Materials/Ingot_Textures/Adamantite.png",
   "Recipe": {
-    "TimeSeconds": 5,
+    "TimeSeconds": 12,
     "Input": [
       {
         "ItemId": "Ingredient_Hysouls_Soul_Essence",
-        "Quantity": 15
+        "Quantity": 4000
       }
     ],
     "BenchRequirement": [

@@ -1,0 +1,68 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Consumable_Hysouls_Homeward_Bone.name",
+    "Description": "server.items.Consumable_Hysouls_Homeward_Bone.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Bone_Ribs_Long.png",
+  "Recipe": {
+    "TimeSeconds": 2,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Hysouls_Soul_Essence",
+        "Quantity": 150
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Bonfire",
+        "Type": "Crafting",
+        "Categories": [
+          "Bonfire_Merchant"
+        ]
+      }
+    ]
+  },
+  "Quality": "Rare",
+  "Categories": [
+    "Items.Consumables"
+  ],
+  "PlayerAnimationsId": "Item",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Structures/Tubes/Long.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Structures/Tubes/Corner_Textures/Bone.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#dccd97"
+  },
+  "Tags": {
+    "Type": [
+      "Consumable"
+    ]
+  },
+  "Light": {
+    "Color": "#FFD700",
+    "Radius": 1
+  },
+  "ItemSoundSetId": "ISS_Items_Bones",
+  "MaxStack": 5,
+  "DropOnDeath": true,
+  "Consumable": true,
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "HomewardBoneTeleport",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  }
+}

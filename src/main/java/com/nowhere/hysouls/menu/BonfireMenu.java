@@ -27,6 +27,7 @@ import com.nowhere.hysouls.currency.humanity.HumanityManager;
 import com.nowhere.hysouls.currency.soul.SoulCraftingWindow;
 import com.nowhere.hysouls.menu.kindle.KindleManager;
 import com.nowhere.hysouls.Main;
+import com.nowhere.hysouls.display.soul.SoulHud;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -35,6 +36,7 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
 
     @Nullable
     private final Vector3i blockPosition;
+    private final UUID playerUuid;
 
     public BonfireMenu(@Nonnull PlayerRef playerRef) {
         this(playerRef, null);
@@ -43,6 +45,7 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
     public BonfireMenu(@Nonnull PlayerRef playerRef, @Nullable Vector3i blockPosition) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, BindingData.CODEC);
         this.blockPosition = blockPosition;
+        this.playerUuid = playerRef.getUuid();
     }
 
     public static class BindingData {
@@ -59,10 +62,10 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
 
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
+        setBonfireMenuHudState(true);
         uiCommandBuilder.append("Pages/BonfireMenu.ui");
 
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#TextButton53d0dc1c", EventData.of("Type", "LevelUp"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#AttuneMagic", EventData.of("Type", "AttuneMagic"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#TextButton9f6b71fa", EventData.of("Type", "ReverseHollowing"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#TextButton640bb5a9", EventData.of("Type", "Kindle"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CraftButton", EventData.of("Type", "Craft"), false);
@@ -88,8 +91,7 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
                 handleKindle(ref, store);
                 break;
             case "LevelUp":
-            case "AttuneMagic":
-                // TODO: implement these features
+                // TODO: implement this feature
                 break;
         }
     }
@@ -187,5 +189,19 @@ public class BonfireMenu extends InteractiveCustomUIPage<BonfireMenu.BindingData
 
         // Recharge estus immediately with new amount
         Main.get().getBonfireRestService().restAtBonfire(ref, store, blockPosition);
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        setBonfireMenuHudState(false);
+        super.onDismiss(ref, store);
+    }
+
+    private void setBonfireMenuHudState(boolean open) {
+        if (Main.get().getHudManager() == null) return;
+        SoulHud hud = Main.get().getHudManager().getHud(playerUuid);
+        if (hud != null) {
+            hud.setBonfireMenuOpen(open);
+        }
     }
 }

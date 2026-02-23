@@ -218,8 +218,12 @@ public class SoulHudManager {
     public void toggleHud(UUID uuid) {
         SoulHud hud = this.activeHuds.get(uuid);
         if (hud != null) {
-            hud.setVisible(!hud.isVisible());
+            hud.setUserSoulVisible(!hud.isUserSoulVisible());
         }
+    }
+
+    public SoulHud getHud(UUID uuid) {
+        return this.activeHuds.get(uuid);
     }
 
     public void updateSoulDisplay(UUID playerId) {
@@ -247,7 +251,7 @@ public class SoulHudManager {
     public void toggleHumanityHud(UUID uuid) {
         SoulHud hud = this.activeHuds.get(uuid);
         if (hud != null) {
-            hud.setHumanityVisible(!hud.isHumanityVisible());
+            hud.setUserHumanityVisible(!hud.isUserHumanityVisible());
         }
     }
 

@@ -1,18 +1,48 @@
 {
   "enabled": true,
   "categories": {
-    "Void": {
-      "tags": ["Void"],
+    "Dragon": {
+      "tags": ["Dragons"],
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 1200,
+          "amount": 1500,
           "chance": 1.0
         },
         "humanity_essence": {
           "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
           "amount": 1,
-          "chance": 0.15
+          "chance": 0.10
+        }
+      }
+    },
+    "Void": {
+      "tags": ["Void"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 1500,
+          "chance": 1.0
+        },
+        "humanity_essence": {
+          "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
+          "amount": 1,
+          "chance": 0.10
+        }
+      }
+    },
+    "Golem": {
+      "tags": ["Golems"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 600,
+          "chance": 1.0
+        },
+        "humanity_essence": {
+          "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
+          "amount": 1,
+          "chance": 0.05
         }
       }
     },
@@ -21,13 +51,13 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 900,
+          "amount": 600,
           "chance": 1.0
         },
         "humanity_essence": {
           "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
           "amount": 1,
-          "chance": 0.1
+          "chance": 0.05
         }
       }
     },
@@ -42,13 +72,28 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 700,
+          "amount": 300,
           "chance": 1.0
         },
         "humanity_essence": {
           "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
           "amount": 1,
-          "chance": 0.08
+          "chance": 0.03
+        }
+      }
+    },
+    "Spirit": {
+      "tags": ["Spirits"],
+      "drops": {
+        "soul_essence": {
+          "itemId": "Ingredient_Hysouls_Soul_Essence",
+          "amount": 150,
+          "chance": 1.0
+        },
+        "humanity_essence": {
+          "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
+          "amount": 1,
+          "chance": 0.01
         }
       }
     },
@@ -60,13 +105,13 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 450,
+          "amount": 150,
           "chance": 1.0
         },
         "humanity_essence": {
           "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
           "amount": 1,
-          "chance": 0.03
+          "chance": 0.01
         }
       }
     },
@@ -75,7 +120,7 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 180,
+          "amount": 50,
           "chance": 1.0
         }
       }
@@ -85,7 +130,7 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 90,
+          "amount": 30,
           "chance": 1.0
         }
       }
@@ -95,7 +140,7 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 80,
+          "amount": 15,
           "chance": 1.0
         }
       }
@@ -105,7 +150,7 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 75,
+          "amount": 25,
           "chance": 1.0
         }
       }
@@ -115,8 +160,13 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 70,
+          "amount": 20,
           "chance": 1.0
+        },
+        "humanity_essence": {
+          "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
+          "amount": 1,
+          "chance": 0.10
         }
       }
     },
@@ -125,7 +175,7 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 50,
+          "amount": 10,
           "chance": 1.0
         }
       }
@@ -134,13 +184,13 @@
       "drops": {
         "soul_essence": {
           "itemId": "Ingredient_Hysouls_Soul_Essence",
-          "amount": 100,
+          "amount": 50,
           "chance": 1.0
         },
         "humanity_essence": {
           "itemId": "Ingredient_Hysouls_Humanity_Essence_Concentrated",
           "amount": 1,
-          "chance": 0.05
+          "chance": 0.02
         }
       }
     }

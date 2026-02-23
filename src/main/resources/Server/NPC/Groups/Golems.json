@@ -1,0 +1,11 @@
+{
+  "IncludeRoles": [
+    "Golem_Crystal_Earth",
+    "Golem_Crystal_Flame",
+    "Golem_Crystal_Frost",
+    "Golem_Crystal_Sand",
+    "Golem_Crystal_Thunder",
+    "Golem_Firesteel",
+    "Golem_Guardian_Void"
+  ]
+}

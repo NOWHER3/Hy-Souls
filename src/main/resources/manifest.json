@@ -1,7 +1,7 @@
 {
   "Group": "Nowhere",
   "Name": "Hy-Souls",
-  "Version": "0.0.7",
+  "Version": "0.0.8",
   "Description": "Adds a Soul Counter",
   "Main": "com.nowhere.hysouls.Main",
   "ServerVersion": "2026.02.19-1a311a592",

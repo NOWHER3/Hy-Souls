@@ -1,12 +1,15 @@
 title: Hy-Souls Wiki
 description: A Dark Souls-inspired mod for Hytale
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
 
 url: ""
 
 aux_links:
   "GitHub":
-    - "https://github.com/CohesionForce/Hy-Souls"
+    - "https://github.com/NOWHER3/Hy-Souls"
 
 nav_sort: order
 
